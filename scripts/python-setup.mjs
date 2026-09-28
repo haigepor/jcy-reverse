@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -21,15 +22,20 @@ if (process.env.JCY_SKIP_PYTHON === "1") {
   process.exit(0);
 }
 
+const managedPython = [
+  path.join(os.homedir(), ".workbuddy-ai", "binaries", "python", "versions", "3.13.12", process.platform === "win32" ? "python.exe" : "bin/python"),
+  path.join(os.homedir(), ".workbuddy-ai", "binaries", "python", "versions", "3.13.14", process.platform === "win32" ? "python.exe" : "bin/python"),
+];
 const candidates = process.env.PYTHON
   ? [[process.env.PYTHON, []]]
   : process.platform === "win32"
-    ? [["py", ["-3"]], ["python", []]]
-    : [["python3", []], ["python", []]];
+    ? [...managedPython.map((command) => [command, []]), ["py", ["-3"]], ["python", []]]
+    : [...managedPython.map((command) => [command, []]), ["python3", []], ["python", []]];
 
 let pythonCommand;
 let pythonPrefix;
 for (const [command, prefix] of candidates) {
+  if (path.isAbsolute(command) && !fs.existsSync(command)) continue;
   const result = run(command, [...prefix, "--version"]);
   if (result.status === 0) {
     pythonCommand = command;
