@@ -57,11 +57,23 @@ pnpm setup
 ## 常用命令
 
 ```bash
-pnpm validate       # 校验目录骨架、文档入口与工具清单
-pnpm docs:serve     # 启动 docsify 文档站
-pnpm python:install # 只安装/修复 Python 虚拟环境
-pnpm tools:install  # 只安装 core 逆向工具
-pnpm tools:status   # 查看 core/all 工具是否存在
+pnpm test                      # 协议测试 + 结构校验（提交前必跑）
+pnpm test:protocol             # 只跑协议层单元测试
+pnpm validate                  # README 目录树 ↔ 文件系统 + 文档内链校验
+pnpm docs:serve                # 启动 docsify 文档站
+pnpm python:install            # 只安装/修复基础 Python 环境
+pnpm python:install:analysis   # 追加分析依赖（frida / Pillow / numpy）
+pnpm tools:install             # 只安装 core 逆向工具
+pnpm tools:status              # 查看 core/all 工具是否存在
+```
+
+## 可选：安装协议库
+
+`packages/protocol` 可从本地以可编辑模式安装，便于在新脚本中直接 `import jcy_protocol`：
+
+```bash
+.venv/Scripts/python.exe -m pip install -e packages/protocol   # Windows
+.venv/bin/python -m pip install -e packages/protocol            # macOS / Linux
 ```
 
 ## 目录与工具落点
@@ -78,9 +90,15 @@ pnpm tools:status   # 查看 core/all 工具是否存在
 ## 验证
 
 ```bash
-pnpm validate
+pnpm test          # 10 项协议断言 + 结构校验，任一失败退出码非 0
 pnpm tools:status
 .venv/Scripts/python.exe -c "import requests; from Crypto.Cipher import AES; print('python deps ok')"
 ```
 
 Windows PowerShell 中最后一条使用 `.venv\Scripts\python.exe`；Git Bash 中使用 `.venv/Scripts/python.exe`。
+
+### 依赖分层的说明
+
+`out/*.py` 分析脚本实际用到 `frida`（51 处引用）、`PIL`（8 处）、`numpy`（1 处），
+这些**不在**默认 `pnpm install` 中安装，因为 frida 版本必须与设备端 frida-server 严格一致
+（本项目为 17.8.2）。需要做动态分析时再执行 `pnpm python:install:analysis`。

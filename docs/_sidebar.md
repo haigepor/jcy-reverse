@@ -15,7 +15,10 @@
   - [其余端点速查](api/endpoints.md)
 - **项目工程化**
   - [环境安装与复现](installation.md)
+  - [项目结构说明](structure.md)
+  - [分析脚本索引](scripts-index.md)
   - [版本标签说明](tags.md)
+  - [推送流程提示词](git-push-prompt.md)
 - **解密过程全记录**
   - [破解放事 (完整时间线)](analysis/journey.md)
   - [工具链构建 (blutter/frida)](analysis/toolchain.md)

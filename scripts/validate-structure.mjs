@@ -46,7 +46,8 @@ function parseTree(lines) {
     const match = line.match(/^([│\s]*)[├└]──\s+(.+?)\s*$/);
     if (!match) continue;
     const depth = Math.floor(match[1].length / 4);
-    const name = match[2].split(/\s{2,}/)[0].replace(/\/$/, "").trim();
+    // 名称取首个空白分隔的 token（文件名不含空格），说明文字可为单空格分隔
+    const name = match[2].trim().split(/\s+/)[0].replace(/\/$/, "");
     if (!name) continue;
     stack[depth] = name;
     stack.length = depth + 1;

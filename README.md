@@ -19,26 +19,40 @@ Flutter 壳 + 自研加密协议的视频 App 完整逆向工程项目。
 ```
 .
 ├── README.md              本文件（项目入口）
+├── LICENSE                使用许可（仅供研究使用）
+├── CHANGELOG.md           变更日志
+├── CONTRIBUTING.md        贡献指南（提交规范与自查清单）
+├── SECURITY.md            安全说明（可提交/不可提交内容）
 ├── package.json           pnpm 脚本与依赖入口（postinstall 自动装工具）
 ├── pnpm-workspace.yaml    workspace 定义
 ├── pnpm-lock.yaml         依赖锁文件（可复现安装）
 ├── .npmrc                 pnpm 配置
 ├── .gitignore             版本控制排除规则（工具/二进制/解包产物不入库）
+├── .gitattributes         行尾与文本属性统一
+├── .editorconfig          编辑器风格统一
+├── .github/               CI 工作流与 Issue/PR 模板
 ├── config/
 │   └── tools.json         逆向工具安装清单（core / all 两个工具集）
 ├── scripts/
 │   ├── bootstrap.mjs      工具下载与安装（GitHub Release / 归档 / git clone）
-│   ├── python-setup.mjs   创建 .venv 并安装 Python 依赖
-│   └── validate-structure.mjs  目录骨架与文档一致性校验
+│   ├── python-setup.mjs   创建 .venv 并安装 Python 依赖（--analysis 装分析依赖）
+│   ├── run-tests.mjs      运行协议层测试
+│   ├── validate-structure.mjs  README 目录树 ↔ 文件系统双向校验 + 内链校验
+│   └── lib/
+│       └── python-env.mjs Python 解释器发现（脚本间共用）
 ├── python/
-│   └── requirements.txt   gg_client.py 运行依赖（requests / pycryptodome）
-├── packages/              预留的可复用模块目录
+│   ├── requirements.txt   基础依赖（requests / pycryptodome）
+│   └── requirements-analysis.txt  分析依赖（frida / Pillow / numpy）
+├── packages/              可复用模块（从分析脚本抽取）
+│   └── protocol/          jcy_protocol：双通道加解密原语 + 已验证测试
 ├── apk/                   原始样本 base.apk（仅本地保存，不入库）
 ├── docs/                  逆向文档站（docsify，阅读入口 docs/index.html）
 │   ├── analysis/          解密过程全记录（时间线/工具链/证据/遗留问题）
 │   ├── api/               接口文档（总览/视频列表/播放/设备登录/端点速查）
 │   ├── crypto/            加密算法（三通道架构/监控/信令/HTTP body/X-Token）
 │   ├── installation.md    环境安装与复现
+│   ├── structure.md       项目结构、分层与扩展点
+│   ├── scripts-index.md   out/ 下 104 个分析脚本的按族索引
 │   ├── tags.md            版本标签与仓库 Topics 说明
 │   ├── git-push-prompt.md 仓库推送流程提示词
 │   └── assets/            静态资源
