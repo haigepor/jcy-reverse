@@ -4,6 +4,7 @@
  * 校验项：
  *  1. README.md 目录树中的每个条目，在文件系统上真实存在
  *  2. 文件系统顶层条目（排除 .git / node_modules / .venv / .workbuddy-ai），都在 README 目录树中登记
+ *  2b. 骨架区目录逐层登记（docs / scripts / packages / python / config / .github）
  *  3. docs/_sidebar.md 与各文档中的相对链接指向真实文件
  *  4. 关键文件与目录完整性
  *  5. 工具清单（config/tools.json）与 package.json 脚本一致性
@@ -17,6 +18,11 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const IGNORED_TOP_LEVEL = new Set([".git", "node_modules", ".venv", ".workbuddy-ai"]);
 const GLOB_CHARS = /[*?[\]{}]/;
+
+// 骨架区：源码/文档/配置目录，必须逐层在 README 目录树中登记，防止文档漂移
+const DEEP_DIR_ROOTS = [".github", "config", "docs", "packages", "python", "scripts"];
+// 产物区：逆向工作区，含大量中间产物，仅要求顶层登记，不强制逐层展开
+const ARTIFACT_DIR_ROOTS = ["apk", "out", "reflutter_work", "tools"];
 
 const errors = [];
 const warnings = [];
@@ -60,18 +66,20 @@ function checkReadmeTree() {
   const lines = extractTreeLines();
   if (!lines) {
     errors.push("README.md 中未找到目录树代码块");
-    return;
+    return new Set();
   }
   const entries = parseTree(lines);
   if (entries.length === 0) {
     errors.push("README.md 目录树解析结果为空");
-    return;
+    return new Set();
   }
 
   const declaredTopLevel = new Set();
+  const declaredPaths = new Set();
   for (const entry of entries) {
     if (GLOB_CHARS.test(entry.name)) continue; // 形如 *.py 的说明性条目
     const target = entry.segments.join("/");
+    declaredPaths.add(target);
     if (entry.depth === 0) declaredTopLevel.add(entry.name);
     if (!exists(target)) errors.push(`README 目录树登记的路径不存在: ${target}`);
   }
@@ -82,6 +90,41 @@ function checkReadmeTree() {
   }
 
   process.stdout.write(`  README 目录树：条目 ${entries.length} 个，顶层 ${declaredTopLevel.size} 项已双向比对\n`);
+  return declaredPaths;
+}
+
+// ---------------------------------------------------------------------------
+// 2b. 骨架区目录逐层登记
+// ---------------------------------------------------------------------------
+
+function collectDirs(rel, acc = []) {
+  for (const item of fs.readdirSync(path.join(ROOT, rel), { withFileTypes: true })) {
+    if (!item.isDirectory()) continue;
+    const child = `${rel}/${item.name}`;
+    acc.push(child);
+    collectDirs(child, acc);
+  }
+  return acc;
+}
+
+function checkNestedDirs(declaredPaths) {
+  let checked = 0;
+  for (const root of DEEP_DIR_ROOTS) {
+    if (!exists(root)) {
+      errors.push(`骨架区目录不存在: ${root}`);
+      continue;
+    }
+    for (const dir of collectDirs(root)) {
+      checked += 1;
+      if (!declaredPaths.has(dir)) errors.push(`骨架区目录未在 README 目录树登记: ${dir}/`);
+    }
+  }
+  for (const root of ARTIFACT_DIR_ROOTS) {
+    if (!exists(root)) errors.push(`产物区目录不存在: ${root}`);
+  }
+  process.stdout.write(
+    `  嵌套目录：骨架区逐层校验 ${checked} 个，产物区 ${ARTIFACT_DIR_ROOTS.length} 个仅顶层登记\n`,
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -140,6 +183,8 @@ const REQUIRED_FILES = [
   "scripts/run-tests.mjs",
   "scripts/validate-structure.mjs",
   "scripts/lib/python-env.mjs",
+  "scripts/re-env/start_re_env.bat",
+  "scripts/re-env/verify_env.py",
   "python/requirements.txt",
   "python/requirements-analysis.txt",
   "packages/README.md",
@@ -154,6 +199,7 @@ const REQUIRED_FILES = [
   "docs/installation.md",
   "docs/structure.md",
   "docs/scripts-index.md",
+  "docs/setup/ldplayer-magisk-env.md",
   "docs/tags.md",
   "docs/git-push-prompt.md",
   "out/client/gg_client.py",
@@ -164,14 +210,20 @@ const REQUIRED_FILES = [
 ];
 
 const REQUIRED_DIRS = [
+  ".github/ISSUE_TEMPLATE",
+  ".github/workflows",
   "docs/analysis",
   "docs/api",
   "docs/crypto",
+  "docs/setup",
   "out/client",
   "out/demo",
   "tools",
   "packages",
+  "packages/protocol/jcy_protocol",
+  "packages/protocol/tests",
   "scripts/lib",
+  "scripts/re-env",
 ];
 
 function checkRequired() {
@@ -210,7 +262,8 @@ function checkToolManifest() {
 // ---------------------------------------------------------------------------
 
 process.stdout.write("[jcy-validate] 开始校验\n");
-checkReadmeTree();
+const declaredPaths = checkReadmeTree();
+checkNestedDirs(declaredPaths);
 checkLinks();
 checkRequired();
 checkToolManifest();

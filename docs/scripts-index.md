@@ -104,6 +104,20 @@ hook `vmplugin.invoke_method` 等 FFI 边界，捕获跨语言调用的明文与
 编译：`g++ -O3 -march=native -o cscan.exe cscan.c`（MinGW）。
 编译产物 `.exe` 不入库，见 `.gitignore`。
 
+## 十一、工程脚本（`scripts/`，不在 `out/`）
+
+上述 104 个脚本位于 `out/`（逆向过程记录）。环境与质量保障脚本另置于 `scripts/`：
+
+| 文件 | 说明 |
+|---|---|
+| `scripts/bootstrap.mjs` | 逆向工具下载与安装（GitHub Release / 归档 / git clone） |
+| `scripts/python-setup.mjs` | 创建 `.venv` 并安装 Python 依赖（`--analysis` 追加分析依赖） |
+| `scripts/run-tests.mjs` | 运行协议层单元测试 |
+| `scripts/validate-structure.mjs` | README 目录树 ↔ 文件系统双向校验 + 内链校验 |
+| `scripts/lib/python-env.mjs` | Python 解释器发现（脚本间共用） |
+| `scripts/re-env/start_re_env.bat` | 拉起雷电14 模拟器并触发环境自检 |
+| `scripts/re-env/verify_env.py` | 环境就绪度验收（Magisk / LSPosed / frida） |
+
 ## 依赖汇总（实测统计）
 
 | 模块 | 引用次数 | 归属 |

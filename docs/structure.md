@@ -7,9 +7,9 @@
 
 | 路径 | 职责 | 入库 |
 |---|---|---|
-| `docs/` | 逆向文档站（docsify），分析结论的**唯一权威出口** | 是 |
+| `docs/` | 逆向文档站（docsify），分析结论的**唯一权威出口**；子目录：`analysis/ api/ crypto/ setup/ assets/` | 是 |
 | `packages/` | 从分析脚本抽取的**可复用库**（当前：`protocol`） | 是 |
-| `scripts/` | 工程脚本：工具安装、Python 环境、测试、结构校验 | 是 |
+| `scripts/` | 工程脚本：工具安装、Python 环境、测试、结构校验；`re-env/` 为动态环境拉起与验收 | 是 |
 | `config/` | 工具安装清单 `tools.json` | 是 |
 | `python/` | Python 依赖声明 | 是 |
 | `out/` | **分析过程记录**：脚本、样本数据、分析主文档 | 部分 |
@@ -64,6 +64,9 @@ apk/base.apk
 ## 四、关键约束
 
 1. **README 目录树必须与文件系统一致**。新增顶层条目后不更新 README，`pnpm validate` 会失败。
+   骨架区（`.github/ config/ docs/ packages/ python/ scripts/`）还需**逐层登记**：在 `docs/` 下新增
+   子目录而不写进 README 目录树，同样会导致校验失败。产物区（`apk/ out/ reflutter_work/ tools/`）
+   只要求顶层登记，不强制逐层展开。
 2. **文档内链必须有效**。`docs/_sidebar.md` 与各文档中的相对链接会被逐一校验。
 3. **新增文档要登记到 `docs/_sidebar.md`**，否则文档站导航不到。
 4. **工具不手工下载**：加入 `config/tools.json`，由 `pnpm tools:install` 获取。

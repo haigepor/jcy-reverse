@@ -5,6 +5,18 @@
 
 ## [未发布]
 
+### 新增
+
+- `docs/setup/ldplayer-magisk-env.md`：雷电14 + Kitsune Mask + Zygisk Next + LSPosed + frida 动态环境搭建与结论
+- `scripts/re-env/`：动态环境一键拉起（`start_re_env.bat`）与就绪度验收（`verify_env.py`）
+- `scripts/validate-structure.mjs` 新增**骨架区目录逐层登记**校验（`docs/ scripts/ packages/ python/ config/ .github/`）
+
+### 变更
+
+- README 目录树补全 `docs/setup/`、`scripts/re-env/`、`packages/protocol/*`、`.github/*` 子层
+- `docs/scripts-index.md` 新增工程脚本（`scripts/`）索引小节
+- `docs/structure.md` 明确骨架区 / 产物区的校验粒度差异
+
 ### 计划中
 
 - HTTP body 随机会话 key 的运行时提取（遗留项，见 `docs/analysis/open-questions.md`）
