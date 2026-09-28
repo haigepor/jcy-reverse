@@ -1,0 +1,67 @@
+# ============================================================
+# 囧次元逆向项目 .gitignore
+# 原则：入库文档/代码/样本数据；排除第三方工具、大二进制与解包产物
+# ============================================================
+
+# ===== 工具链（第三方工具，体积大，不入库）=====
+tools/blutter/
+tools/jadx/
+tools/platform-tools/
+tools/*.jar
+tools/*.apk
+tools/*.so
+tools/*.so.*
+tools/fs
+tools/fs_test.xz
+tools/re-env/
+
+# ===== 原始样本 / 构建产物（二进制，不入库）=====
+apk/*.apk
+reflutter_work/*.apk
+reflutter_work/*.apk.idsig
+
+# ===== 解包 / 反编译中间产物（可由 base.apk 重新生成）=====
+out/base_decoded/
+out/base_nores/
+out/base_smali/
+out/base_smali_patched/
+out/jadx_src/
+out/blutter_lib/
+out/blutter_out/asm/
+out/blutter_out/ida_script/
+out/lua_dump/
+out/lua_src/
+out/nativelibs/
+out/flows/
+out/ct_samples/
+out/demo/assets/
+
+# ===== 大二进制 / 转储 / 截图 =====
+out/mem_dump.bin*
+out/*.so
+out/*.exe
+out/*.png
+out/*.pcap
+out/*.flows
+out/*.bin
+!out/sm4_sbox.bin
+
+# ===== 大体量字符串导出（可由 libs 重新导出）=====
+out/libapp_strings.txt
+out/libapp_strings_full.txt
+out/libcore.so_strings.txt
+out/libloader.so_strings.txt
+
+# ===== reflutter 大文件工作产物 =====
+reflutter_work/dump.dart
+reflutter_work/dump2.dart
+reflutter_work/dump_parsed.jsonl
+reflutter_work/dump2_parsed.jsonl
+
+# ===== 运行环境与临时文件 =====
+.workbuddy-ai/
+__pycache__/
+*.log
+*.tmp
+.DS_Store
+Thumbs.db

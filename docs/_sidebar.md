@@ -1,0 +1,18 @@
+- [首页](/)
+- **加密算法**
+  - [总览：三通道架构](crypto/overview.md)
+  - [监控通道 (libcore/qPwC)](crypto/monitor-channel.md)
+  - [信令通道 (libloader/kFGT)](crypto/signaling-channel.md)
+  - [HTTP body (apiEncrypt/P0.P1)](crypto/http-body.md)
+  - [X-Token 认证机制](crypto/x-token.md)
+- **接口文档**
+  - [总览与请求头](api/overview.md)
+  - [视频列表 /app/video/list](api/video-list.md)
+  - [播放链接 /app/video/play](api/video-play.md)
+  - [设备登录 /app/video/device-base](api/device-base.md)
+  - [其余端点速查](api/endpoints.md)
+- **解密过程全记录**
+  - [破解放事 (完整时间线)](analysis/journey.md)
+  - [工具链构建 (blutter/frida)](analysis/toolchain.md)
+  - [证据索引](analysis/evidence.md)
+  - [遗留问题与实验设计](analysis/open-questions.md)

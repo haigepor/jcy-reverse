@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>囧次元 API 逆向验证页</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+<style>
+  :root { --bg:#12141c; --card:#1b1e2b; --accent:#ff8c26; --text:#e8e9ee; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; }
+  header { padding:18px 24px; border-bottom:1px solid #2a2e40; display:flex; align-items:center; gap:16px; }
+  header h1 { font-size:20px; color:var(--accent); }
+  header .src { font-size:12px; color:#8a8fa3; }
+  .tabs { display:flex; gap:4px; padding:12px 24px 0; }
+  .tabs button { background:transparent; border:none; color:#9aa0b5; font-size:15px; padding:8px 18px; cursor:pointer; border-bottom:2px solid transparent; }
+  .tabs button.on { color:var(--accent); border-color:var(--accent); font-weight:600; }
+  main { padding:20px 24px; max-width:1280px; margin:0 auto; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:16px; }
+  .card { background:var(--card); border-radius:10px; overflow:hidden; cursor:pointer; transition:transform .15s; border:1px solid #262a3d; }
+  .card:hover { transform:translateY(-3px); border-color:var(--accent); }
+  .card img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; background:#0c0d14; }
+  .card .t { padding:8px 10px; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .card .s { padding:0 10px 10px; font-size:11px; color:#7d8296; }
+  .player-wrap { background:#000; border-radius:10px; overflow:hidden; margin-bottom:20px; display:none; }
+  .player-wrap video { width:100%; max-height:56vh; display:block; }
+  .info { padding:14px 4px; font-size:13px; color:#9aa0b5; line-height:1.7; }
+  .info b { color:var(--text); }
+  .endpoint { background:#0c0d14; border:1px solid #262a3d; border-radius:8px; padding:10px 14px; font-family:Consolas,monospace; font-size:12px; color:#7ec2ff; margin:10px 0; overflow-x:auto; white-space:pre; }
+  .back { background:var(--accent); color:#111; border:none; border-radius:6px; padding:8px 20px; cursor:pointer; font-weight:600; margin-bottom:12px; }
+  .offline-note { background:#2a2313; border:1px solid #5a4a1a; color:#d8c88a; padding:10px 14px; border-radius:8px; font-size:12px; margin-bottom:14px; line-height:1.6; }
+</style>
+</head>
+<body>
+<header>
+  <h1>囧次元 · API 逆向验证页</h1>
+  <span class="src">端点: http://43.145.33.254:27990 · Dart/3.6 (dart:io) · 加密: 见 out/API_ANALYSIS.md</span>
+</header>
+
+<main>
+  <div id="listView">
+    <div class="tabs" id="tabs"></div>
+    <div class="endpoint" id="epLine">GET /app/video/list?channel=1&amp;sort=weight&amp;limit=6&amp;page=1
+Headers: APPID: com.tudou.tool | ts: &lt;ms&gt; | nonce: &lt;rand8&gt; | tcs: 2 | x-version: 2020-09-17 | authentication: &lt;X-Token b64&gt;</div>
+    <div class="offline-note">⚠ 本页为离线验证页: 列表数据来自真机抓包 (X-Token 与 ts/nonce 服务器侧绑定, 无法纯离线刷新;
+    实时数据需真机登录流程, 见 out/API_ANALYSIS.md §B/§C)。点击卡片尝试播放。</div>
+    <div class="grid" id="grid"></div>
+  </div>
+  <div id="playView" style="display:none">
+    <button class="back" onclick="backToList()">← 返回列表</button>
+    <div class="player-wrap"><video id="video" controls autoplay></video></div>
+    <div class="endpoint" id="playEp"></div>
+    <div class="info" id="infoBox"></div>
+  </div>
+</main>
+
+<script>
+// 真实抓包数据 (out/auth_samples.json 88 样本 + 主页 UI 实拍)。play_url 需 /app/video/play 响应解密获得。
+const VIDEOS = [
+  { id:113244, name:"海贼王",   score:"10.0", meta:"2014/日本/搞笑,经典,热血,战斗,冒险,励志", eps:"1180|周日23:30", ch:1,
+    cover:"", play:"" },
+  { id:0,      name:"转生贵族靠着鉴定技能", score:"", meta:"2026/日本/奇幻,恋爱,青春,轻小说改", eps:"1|周日23:00更", ch:1, cover:"", play:"" },
+  { id:0,      name:"无职转生III",  score:"10.0", meta:"2026/日本/奇幻,后宫,冒险,战斗,异世界,穿越", eps:"14全", ch:1, cover:"", play:"" },
+  { id:0,      name:"二十世纪电气目录", score:"5.5", meta:"2026/日本/奇幻,恋爱,青春,轻小说改", eps:"13全", ch:1, cover:"", play:"" },
+  { id:0,      name:"Re:ゼロから始める異世界生活 4th", score:"", meta:"日本/奇幻", eps:"", ch:1, cover:"", play:"" },
+  { id:0,      name:"君のことが大大大大大好きな100人の彼女", score:"", meta:"日本/恋爱", eps:"", ch:1, cover:"", play:"" },
+];
+const CHANNELS = ["推荐","日漫","國漫","動畫電影","其他動漫"];
+
+const grid = document.getElementById('grid');
+const tabs = document.getElementById('tabs');
+CHANNELS.forEach((c,i) => {
+  const b = document.createElement('button');
+  b.textContent = c; if (i===0) b.className='on';
+  b.onclick = () => document.getElementById('epLine').textContent =
+    `GET /app/video/list?channel=${i||1}&sort=weight&limit=6&page=1  (channel=${i||1})`;
+  tabs.appendChild(b);
+});
+
+function render() {
+  grid.innerHTML = '';
+  VIDEOS.forEach(v => {
+    const d = document.createElement('div');
+    d.className = 'card';
+    d.innerHTML = `<img src="${v.cover}" alt="">
+      <div class="t">${v.name}</div><div class="s">${v.eps||''} ${v.score?'· '+v.score+'分':''}</div>`;
+    d.onclick = () => openPlay(v);
+    grid.appendChild(d);
+  });
+}
+
+function openPlay(v) {
+  document.getElementById('listView').style.display = 'none';
+  const pv = document.getElementById('playView'); pv.style.display = 'block';
+  document.getElementById('playEp').textContent =
+    `POST /app/video/play?id=${v.id}&play=mp4   →   POST /app/playaddr/v4/client (GUrlParsed)\n` +
+    `→ 响应解密 (会话 key, apiDecrypt) → raw_play_url / m3u8FileDomain → /hls.m3u8`;
+  document.getElementById('infoBox').innerHTML =
+    `<b>${v.name}</b> ${v.score?v.score+'分':''}<br>${v.meta}<br>更新: ${v.eps}<br><br>` +
+    (v.play ? '' : '⚠ 播放地址需 POST /app/video/play 响应解密获得 (随机会话 key 加密, 详见 API_ANALYSIS.md §C)。');
+  const video = document.getElementById('video');
+  if (HLS.isSupported() && v.play) {
+    const hls = new HLS(); hls.loadSource(v.play); hls.attachMedia(video);
+  } else if (v.play) { video.src = v.play; }
+}
+function backToList() {
+  document.getElementById('playView').style.display = 'none';
+  document.getElementById('listView').style.display = 'block';
+  const v = document.getElementById('video'); if (v) v.pause();
+}
+render();
+</script>
+</body>
+</html>
