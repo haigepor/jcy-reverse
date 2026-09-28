@@ -10,6 +10,7 @@
 - `docs/setup/ldplayer-magisk-env.md`：雷电14 + Kitsune Mask + Zygisk Next + LSPosed + frida 动态环境搭建与结论
 - `scripts/re-env/`：动态环境一键拉起（`start_re_env.bat`）与就绪度验收（`verify_env.py`）
 - `scripts/validate-structure.mjs` 新增**骨架区目录逐层登记**校验（`docs/ scripts/ packages/ python/ config/ .github/`）
+- `scripts/validate-structure.mjs` 新增**侧边栏覆盖**校验：`docs/` 下每篇 `.md` 必须被 `_sidebar.md` 引用
 
 ### 变更
 

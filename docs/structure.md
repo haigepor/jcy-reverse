@@ -68,7 +68,8 @@ apk/base.apk
    子目录而不写进 README 目录树，同样会导致校验失败。产物区（`apk/ out/ reflutter_work/ tools/`）
    只要求顶层登记，不强制逐层展开。
 2. **文档内链必须有效**。`docs/_sidebar.md` 与各文档中的相对链接会被逐一校验。
-3. **新增文档要登记到 `docs/_sidebar.md`**，否则文档站导航不到。
+3. **新增文档要登记到 `docs/_sidebar.md`**，否则文档站导航不到，且 `pnpm validate` 会失败
+   （`docs/` 下每篇 `.md` 都要求被侧边栏引用，`README.md` / `_sidebar.md` 除外）。
 4. **工具不手工下载**：加入 `config/tools.json`，由 `pnpm tools:install` 获取。
 5. **二进制不入库**：`.gitignore` 已覆盖工具、APK、内存转储、截图、日志。
 
@@ -80,6 +81,7 @@ apk/base.apk
 | 新增可复用能力 | `packages/<name>/`，含 README + 测试，并接入 `pnpm test` |
 | 新增工具 | `config/tools.json` + `tools/README.md` |
 | 新增工程脚本 | `scripts/`，共用逻辑放 `scripts/lib/` |
+| 新增动态环境脚本 | `scripts/re-env/`，并在 README 目录树登记 |
 | 新增 CI 校验 | `.github/workflows/` |
 
 ## 六、验证

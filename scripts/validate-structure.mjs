@@ -6,6 +6,7 @@
  *  2. 文件系统顶层条目（排除 .git / node_modules / .venv / .workbuddy-ai），都在 README 目录树中登记
  *  2b. 骨架区目录逐层登记（docs / scripts / packages / python / config / .github）
  *  3. docs/_sidebar.md 与各文档中的相对链接指向真实文件
+ *  3b. docs/ 下每篇文档都登记到 docs/_sidebar.md
  *  4. 关键文件与目录完整性
  *  5. 工具清单（config/tools.json）与 package.json 脚本一致性
  *
@@ -163,6 +164,39 @@ function checkLinks() {
 }
 
 // ---------------------------------------------------------------------------
+// 3b. docs 文档必须登记到侧边栏
+// ---------------------------------------------------------------------------
+
+function checkSidebarCoverage() {
+  const sidebarPath = path.join(ROOT, "docs", "_sidebar.md");
+  if (!fs.existsSync(sidebarPath)) {
+    errors.push("缺少 docs/_sidebar.md");
+    return;
+  }
+  const sidebar = fs.readFileSync(sidebarPath, "utf8");
+  const linked = new Set(
+    [...sidebar.matchAll(/\]\(([^)\s]+?\.md)\)/g)].map((m) => m[1].replace(/^\.?\//, "")),
+  );
+
+  let checked = 0;
+  const walk = (rel) => {
+    for (const item of fs.readdirSync(path.join(ROOT, "docs", rel), { withFileTypes: true })) {
+      const child = rel ? `${rel}/${item.name}` : item.name;
+      if (item.isDirectory()) {
+        walk(child);
+        continue;
+      }
+      if (!item.name.endsWith(".md")) continue;
+      if (child === "README.md" || child === "_sidebar.md") continue;
+      checked += 1;
+      if (!linked.has(child)) errors.push(`docs/${child} 未登记到 docs/_sidebar.md`);
+    }
+  };
+  walk("");
+  process.stdout.write(`  侧边栏覆盖：docs 文档 ${checked} 篇已核对\n`);
+}
+
+// ---------------------------------------------------------------------------
 // 4. 关键文件与目录
 // ---------------------------------------------------------------------------
 
@@ -265,6 +299,7 @@ process.stdout.write("[jcy-validate] 开始校验\n");
 const declaredPaths = checkReadmeTree();
 checkNestedDirs(declaredPaths);
 checkLinks();
+checkSidebarCoverage();
 checkRequired();
 checkToolManifest();
 
