@@ -15,7 +15,8 @@
 - 新增 `out/blutter_out/`（pp.txt 对象池 2.6 MB / objs.txt / frida 模板）
 - 新增 `out/demo/index.html` hls.js 离线播放验证页
 - 收录分析脚本族 104 个（out 根目录 py/js/c）
-- 项目清理：移除 181 个中间产物文件（1.05 GB），明细见 `CLEANUP_REPORT.md`
+- 项目清理：移除 181 个中间产物文件（1.05 GB）
+- 工程化：新增 pnpm 骨架，`pnpm install` 自动恢复工具链与 Python 依赖
 
 ## 仓库 Topics（GitHub 标签）
 
