@@ -1,0 +1,25 @@
+# 行尾与文本属性统一（解决跨平台 CRLF 差异）
+* text=auto eol=lf
+
+# Windows 脚本保留 CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# 二进制文件不做行尾转换
+*.png binary
+*.jpg binary
+*.webp binary
+*.apk binary
+*.jar binary
+*.so binary
+*.dex binary
+*.bin binary
+*.xz binary
+*.gz binary
+*.zip binary
+*.idsig binary
+*.pcap binary
+
+# 锁文件与生成物在 diff 中折叠
+pnpm-lock.yaml -diff linguist-generated

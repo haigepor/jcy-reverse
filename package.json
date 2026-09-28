@@ -17,6 +17,9 @@
     "tools:install:all": "node scripts/bootstrap.mjs --set=all",
     "tools:status": "node scripts/bootstrap.mjs --status",
     "python:install": "node scripts/python-setup.mjs",
+    "python:install:analysis": "node scripts/python-setup.mjs --analysis",
+    "test": "node scripts/run-tests.mjs && node scripts/validate-structure.mjs",
+    "test:protocol": "node scripts/run-tests.mjs",
     "validate": "node scripts/validate-structure.mjs",
     "docs:serve": "docsify serve docs",
     "docs:open": "pnpm docs:serve"

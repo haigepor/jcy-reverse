@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jcy-protocol"
+version = "0.1.0"
+description = "囧次元 (com.tudou.tool) 协议层：监控/信令双通道 AES-128-CBC 加解密原语"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "UNLICENSED" }
+dependencies = ["pycryptodome>=3.20,<4"]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[tool.setuptools.packages.find]
+include = ["jcy_protocol*"]

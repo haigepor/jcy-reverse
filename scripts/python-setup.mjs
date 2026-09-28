@@ -1,20 +1,29 @@
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { spawnSync } from "node:child_process";
+
+import { findPython, runPython, venvPythonPath } from "./lib/python-env.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const venvDir = path.join(ROOT, ".venv");
-const requirements = path.join(ROOT, "python", "requirements.txt");
 const bestEffort = process.argv.includes("--best-effort") || process.env.JCY_BEST_EFFORT === "1";
+const withAnalysis = process.argv.includes("--analysis");
 
-function run(command, args) {
-  return spawnSync(command, args, { cwd: ROOT, encoding: "utf8", stdio: "pipe", windowsHide: true, env: process.env });
-}
+const requirementFiles = [
+  path.join(ROOT, "python", "requirements.txt"),
+  ...(withAnalysis ? [path.join(ROOT, "python", "requirements-analysis.txt")] : []),
+];
 
 function warn(message) {
   process.stderr.write(`[jcy-python] WARN ${message}\n`);
+}
+
+function fail(message) {
+  if (bestEffort) {
+    warn(message);
+    process.exit(0);
+  }
+  warn(message);
+  process.exit(1);
 }
 
 if (process.env.JCY_SKIP_PYTHON === "1") {
@@ -22,53 +31,26 @@ if (process.env.JCY_SKIP_PYTHON === "1") {
   process.exit(0);
 }
 
-const managedPython = [
-  path.join(os.homedir(), ".workbuddy-ai", "binaries", "python", "versions", "3.13.12", process.platform === "win32" ? "python.exe" : "bin/python"),
-  path.join(os.homedir(), ".workbuddy-ai", "binaries", "python", "versions", "3.13.14", process.platform === "win32" ? "python.exe" : "bin/python"),
-];
-const candidates = process.env.PYTHON
-  ? [[process.env.PYTHON, []]]
-  : process.platform === "win32"
-    ? [...managedPython.map((command) => [command, []]), ["py", ["-3"]], ["python", []]]
-    : [...managedPython.map((command) => [command, []]), ["python3", []], ["python", []]];
-
-let pythonCommand;
-let pythonPrefix;
-for (const [command, prefix] of candidates) {
-  if (path.isAbsolute(command) && !fs.existsSync(command)) continue;
-  const result = run(command, [...prefix, "--version"]);
-  if (result.status === 0) {
-    pythonCommand = command;
-    pythonPrefix = prefix;
-    break;
-  }
-}
-
-if (!pythonCommand) {
-  const message = "未找到 Python 3；gg_client.py 运行依赖未安装。可安装 Python 3.10+ 后执行 pnpm python:install。";
-  if (bestEffort) { warn(message); process.exit(0); }
-  warn(message); process.exit(1);
-}
-
-const venvPython = process.platform === "win32"
-  ? path.join(venvDir, "Scripts", "python.exe")
-  : path.join(venvDir, "bin", "python");
+const { venvDir, pythonPath: venvPython } = venvPythonPath(ROOT);
 
 if (!fs.existsSync(venvPython)) {
+  const base = findPython();
+  if (!base) {
+    fail("未找到 Python 3；gg_client.py 运行依赖未安装。可安装 Python 3.10+ 后执行 pnpm python:install。");
+  }
   process.stdout.write(`[jcy-python] 创建虚拟环境: ${path.relative(ROOT, venvDir)}\n`);
-  const result = run(pythonCommand, [...pythonPrefix, "-m", "venv", venvDir]);
-  if (result.status !== 0) {
-    const message = `创建虚拟环境失败: ${result.stderr || result.stdout}`;
-    if (bestEffort) { warn(message); process.exit(0); }
-    warn(message); process.exit(1);
+  const created = runPython(base.command, [...base.prefix, "-m", "venv", venvDir]);
+  if (created.status !== 0) {
+    fail(`创建虚拟环境失败: ${created.stderr || created.stdout}`);
   }
 }
 
-process.stdout.write("[jcy-python] 安装 requests / pycryptodome ...\n");
-const install = run(venvPython, ["-m", "pip", "install", "--disable-pip-version-check", "-r", requirements]);
+process.stdout.write(`[jcy-python] 安装依赖: ${requirementFiles.map((f) => path.basename(f)).join(", ")} ...\n`);
+const install = runPython(venvPython, [
+  "-m", "pip", "install", "--disable-pip-version-check", "-q",
+  ...requirementFiles.flatMap((file) => ["-r", file]),
+]);
 if (install.status !== 0) {
-  const message = `Python 依赖安装失败: ${install.stderr || install.stdout}`;
-  if (bestEffort) { warn(message); process.exit(0); }
-  warn(message); process.exit(1);
+  fail(`Python 依赖安装失败: ${install.stderr || install.stdout}`);
 }
 process.stdout.write(`[jcy-python] 完成。解释器: ${path.relative(ROOT, venvPython)}\n`);

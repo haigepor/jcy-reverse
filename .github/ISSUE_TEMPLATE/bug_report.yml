@@ -1,0 +1,42 @@
+name: 问题反馈
+description: 报告分析结论错误、文档缺失或结构问题
+title: "[问题] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈。请勿在正文中粘贴真实账号凭证、token 或他人隐私数据。
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 问题类型
+      options:
+        - 分析结论有误（加密/接口/地址）
+        - 文档与代码不一致
+        - 目录结构与 README 不符
+        - 脚本运行失败
+        - 其他
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: 涉及文件或目录
+      placeholder: 例如 docs/crypto/signaling-channel.md
+    validations:
+      required: true
+  - type: textarea
+    id: detail
+    attributes:
+      label: 问题描述
+      description: 说明现状、预期，以及你的证据或复现方式
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 证据或复现步骤
+      description: 命令、日志、抓包片段（请脱敏）
+    validations:
+      required: false
