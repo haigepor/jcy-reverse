@@ -12,6 +12,11 @@ Flutter 壳 + 自研加密协议的视频 App 完整逆向工程文档。
 | API 加解密逆向 | ✅ 监控/信令双通道 100%; HTTP 结构 100%, 会话 key 运行时项 |
 | 示例页 | ✅ out/demo/index.html (hls.js) |
 | 离线客户端库 | ✅ out/client/gg_client.py (已验证加密层) |
+| 动态运行环境 (雷电14) | ✅ Magisk + Zygisk Next + LSPosed + frida 全部就位 |
+| 雷电 x86_64 上动态 hook 目标 App | ⚠️ 不可行 — App 仅含 arm64 库, libhoudini 转译层 SIGSEGV |
+
+> 动态分析路线提示：`com.tudou.tool` 的 `primaryCpuAbi=arm64-v8a`，在雷电 x86_64 上会在
+> `DartWorker` 线程崩于 `libhoudini.so`。详见 [运行环境文档](setup/ldplayer-magisk-env.md) 第 9 节。
 
 ## 密钥速查
 
@@ -36,6 +41,7 @@ print(channel_decrypt(
 
 ## 文档导航
 
+- **运行环境**: 雷电14 + Kitsune Mask + Zygisk Next + LSPosed + frida 完整搭建
 - **加密算法**: 三通道架构 / 监控通道 / 信令通道 / HTTP body / X-Token
 - **接口文档**: 总览与请求头 / 视频列表 / 播放链接 / 设备登录 / 端点速查
 - **解密过程全记录**: 破解放事 (完整时间线) / 工具链手册 / 证据索引 / 遗留问题
@@ -61,4 +67,6 @@ out/blutter_out/      blutter 产物 (pp.txt 对象池 / asm / frida 模板)
 out/demo/index.html   离线验证页
 out/auth_samples.json 真机抓包样本 (88 条)
 reflutter_work/       dump.dart / 组合包 APK
+tools/re-env/         雷电14 面具环境安装包 (gitignored)
+scripts/re-env/       环境一键拉起 (start_re_env.bat) + 验收 (verify_env.py)
 ```

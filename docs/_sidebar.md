@@ -1,4 +1,6 @@
 - [首页](/)
+- **运行环境**
+  - [雷电14 + Magisk 环境搭建](setup/ldplayer-magisk-env.md)
 - **加密算法**
   - [总览：三通道架构](crypto/overview.md)
   - [监控通道 (libcore/qPwC)](crypto/monitor-channel.md)
