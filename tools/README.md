@@ -1,6 +1,20 @@
 # tools/ — 逆向工具链
 
 本目录存放本项目使用的第三方逆向工具，**因体积与版权原因不入库**，仅本地保存。
+
+## 自动安装
+
+工具安装清单集中在根目录 `config/tools.json`，无需手工下载和改路径：
+
+```bash
+pnpm install             # Node 依赖 + core 工具 + Python 环境
+pnpm tools:install       # 只安装 core 工具
+pnpm tools:install:all   # 追加 blutter / PCAPdroid / Frida Gadget
+pnpm tools:status        # 查看安装状态
+```
+
+下载失败时可设置 `JCY_HTTP_PROXY`，或在网络恢复后重复执行命令；已存在的工具会自动跳过。
+
 本地完整目录如下：
 
 | 工具 | 形态 | 用途 | 获取方式 |

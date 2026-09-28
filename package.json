@@ -1,0 +1,27 @@
+{
+  "name": "jcy-reverse",
+  "version": "0.1.0",
+  "private": true,
+  "description": "囧次元 Flutter/Android 逆向工程研究工作区",
+  "license": "UNLICENSED",
+  "type": "module",
+  "packageManager": "pnpm@9.15.5",
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=9.15.0"
+  },
+  "scripts": {
+    "postinstall": "node scripts/bootstrap.mjs --set=core --best-effort && node scripts/python-setup.mjs --best-effort",
+    "setup": "node scripts/bootstrap.mjs --set=core && node scripts/python-setup.mjs",
+    "tools:install": "node scripts/bootstrap.mjs --set=core",
+    "tools:install:all": "node scripts/bootstrap.mjs --set=all",
+    "tools:status": "node scripts/bootstrap.mjs --status",
+    "python:install": "node scripts/python-setup.mjs",
+    "validate": "node scripts/validate-structure.mjs",
+    "docs:serve": "docsify serve docs",
+    "docs:open": "pnpm docs:serve"
+  },
+  "devDependencies": {
+    "docsify-cli": "4.4.4"
+  }
+}

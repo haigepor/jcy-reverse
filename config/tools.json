@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "toolsDir": "tools",
+  "sets": {
+    "core": [
+      "apktool",
+      "uber-apk-signer",
+      "jadx",
+      "platform-tools"
+    ],
+    "all": [
+      "apktool",
+      "uber-apk-signer",
+      "jadx",
+      "platform-tools",
+      "blutter",
+      "pcapdroid",
+      "frida-gadget"
+    ]
+  },
+  "tools": {
+    "apktool": {
+      "kind": "github-release",
+      "repo": "iBotPeaches/Apktool",
+      "assetPattern": "^apktool_.*\\.jar$",
+      "target": "apktool.jar",
+      "description": "APK 解包、smali 反编译与重打包"
+    },
+    "uber-apk-signer": {
+      "kind": "github-release",
+      "repo": "patrickfav/uber-apk-signer",
+      "assetPattern": "^uber-apk-signer-.*\\.jar$",
+      "target": "uber-apk-signer.jar",
+      "description": "APK zipalign 与 v1/v2/v3/v4 签名"
+    },
+    "jadx": {
+      "kind": "github-release",
+      "repo": "skylot/jadx",
+      "assetPattern": "^jadx-.*\\.zip$",
+      "targetDir": "jadx",
+      "archiveType": "zip",
+      "description": "DEX/APK 到 Java 源码的反编译器"
+    },
+    "platform-tools": {
+      "kind": "archive",
+      "urls": {
+        "win32": "https://dl.google.com/android/repository/platform-tools-latest-windows.zip",
+        "darwin": "https://dl.google.com/android/repository/platform-tools-latest-darwin.zip",
+        "linux": "https://dl.google.com/android/repository/platform-tools-latest-linux.zip"
+      },
+      "targetDir": "platform-tools",
+      "archiveType": "zip",
+      "description": "adb、fastboot 与 Android 设备调试工具"
+    },
+    "blutter": {
+      "kind": "git",
+      "url": "https://github.com/worawit/blutter.git",
+      "targetDir": "blutter",
+      "description": "Flutter/Dart snapshot 结构恢复与反编译工具"
+    },
+    "pcapdroid": {
+      "kind": "github-release",
+      "repo": "emanuele-f/PCAPdroid",
+      "assetPattern": "^PCAPdroid.*\\.apk$",
+      "target": "PCAPdroid.apk",
+      "aliases": ["PCAPdroid_v2.0.2.apk"],
+      "description": "Android 端无 root 抓包工具"
+    },
+    "frida-gadget": {
+      "kind": "github-release",
+      "repo": "frida/frida",
+      "assetPattern": "^frida-gadget-.*-android-arm64\\.so\\.xz$",
+      "target": "frida-gadget-android-arm64.so.xz",
+      "aliases": ["gadget.so.xz", "libgadget.so"],
+      "description": "Frida Gadget arm64 运行库（按需解压并重命名）"
+    }
+  }
+}

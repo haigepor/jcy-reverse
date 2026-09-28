@@ -60,12 +60,29 @@ print(channel_decrypt(
 | 信令 (libloader IPC) | AES-128-CBC PKCS7 | `kFGTbLlOzFHQCIKp` | `F3q22XoM8l6T2Ydc` |
 | HTTP body | 随机会话 key AES-CBC + RSA-2048 包裹 | 每请求随机 | 每请求随机 |
 
+## 一键环境安装（pnpm）
+
+项目已整理为可复现的 pnpm 骨架。首次克隆后，在根目录执行：
+
+```bash
+pnpm install
+```
+
+这会安装 Node 依赖、core 逆向工具（apktool / uber-apk-signer / jadx / platform-tools），并创建 `.venv` 安装 `requests` 与 `pycryptodome`。完整工具集（blutter / PCAPdroid / Frida Gadget）按需执行：
+
+```bash
+pnpm tools:install:all
+pnpm tools:status
+pnpm validate
+```
+
+详细的下载源、代理设置、Python 环境与目录落点见 [`docs/installation.md`](docs/installation.md)；工具清单见 [`config/tools.json`](config/tools.json)。
+
 ## 文档导航（docsify 本地阅读）
 
 ```bash
-cd docs
-python -m http.server 3000
-# 浏览器打开 http://localhost:3000（docsify 从 CDN 加载渲染器）
+pnpm docs:serve
+# 浏览器打开 http://localhost:3000
 ```
 
 - 加密算法：三通道架构 / 监控通道 / 信令通道 / HTTP body / X-Token → `docs/crypto/`

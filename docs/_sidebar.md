@@ -11,6 +11,9 @@
   - [播放链接 /app/video/play](api/video-play.md)
   - [设备登录 /app/video/device-base](api/device-base.md)
   - [其余端点速查](api/endpoints.md)
+- **项目工程化**
+  - [环境安装与复现](installation.md)
+  - [版本标签说明](tags.md)
 - **解密过程全记录**
   - [破解放事 (完整时间线)](analysis/journey.md)
   - [工具链构建 (blutter/frida)](analysis/toolchain.md)

@@ -60,6 +60,10 @@ reflutter_work/dump2_parsed.jsonl
 
 # ===== 运行环境与临时文件 =====
 .workbuddy-ai/
+node_modules/
+.pnpm-store/
+.venv/
+.jcy-download-*/
 __pycache__/
 *.log
 *.tmp
