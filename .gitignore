@@ -1,9 +1,11 @@
 # ============================================================
 # 囧次元逆向项目 .gitignore
-# 原则：入库文档/代码/样本数据；排除第三方工具、大二进制与解包产物
+# 原则：入库文档 / 代码 / 样本数据；排除第三方工具、大二进制与解包产物
+#
+# 目录分层见 README.md「目录结构」，权威校验由 `pnpm validate` 执行。
 # ============================================================
 
-# ===== 工具链（第三方工具，体积大，不入库）=====
+# ===== 第三方工具链（体积大，可由 pnpm tools:install 恢复）=====
 tools/blutter/
 tools/jadx/
 tools/platform-tools/
@@ -15,42 +17,44 @@ tools/fs
 tools/fs_test.xz
 tools/re-env/
 
-# ===== 原始样本 / 构建产物（二进制，不入库）=====
-apk/*.apk
+# ===== 原始样本（二进制，不入库）=====
+assets/apk/*.apk
 reflutter_work/*.apk
 reflutter_work/*.apk.idsig
+libcore.so
 
-# ===== 解包 / 反编译中间产物（可由 base.apk 重新生成）=====
-out/base_decoded/
-out/base_nores/
-out/base_smali/
-out/base_smali_patched/
-out/jadx_src/
-out/blutter_lib/
-out/blutter_out/asm/
-out/blutter_out/ida_script/
-out/lua_dump/
-out/lua_src/
-out/nativelibs/
-out/flows/
-out/ct_samples/
-out/demo/assets/
+# ===== 研究区（白名单入库：代码 + 小型样本）=====
+# research/ 本体约 8.8GB（抓包 4.3G / 报告 1.5G / 引擎镜像 1.5G / 标定转储等），
+# 除下列白名单外一律不入库；二进制镜像的重建步骤见 research/README.md。
+research/*
+!research/README.md
+!research/*.py
+!research/deliverables/
+!research/corpus/
+!research/toolchain/
+!research/captures/
+research/captures/*
+!research/captures/rsa_scan/
+research/captures/rsa_scan/*
+!research/captures/rsa_scan/*.pem
+!research/captures/rsa_scan/*.py
+!research/captures/rsa_scan/*.md
+!research/captures/rsa_scan/*.jsonl
+!research/engine_c/
+research/engine_c/*
+!research/engine_c/*.dll
+# 文档引用的实测脚本与留档结果
+!research/tmp_all_endpoints_par.py
+!research/tmp_all_endpoints.json
+!research/tmp_w1_playchain.py
+!research/tmp_w1_playchain_out.json
+!research/tmp_w1_playtest.py
+!research/tmp_w1_playtest_out.json
+# 研究区运行时产物（不入库）
+research/deliverables/.auth_cache.json
 
-# ===== 大二进制 / 转储 / 截图 =====
-out/mem_dump.bin*
-out/*.so
-out/*.exe
-out/*.png
-out/*.pcap
-out/*.flows
-out/*.bin
-!out/sm4_sbox.bin
-
-# ===== 大体量字符串导出（可由 libs 重新导出）=====
-out/libapp_strings.txt
-out/libapp_strings_full.txt
-out/libcore.so_strings.txt
-out/libloader.so_strings.txt
+# ===== 隔离区（待清除的冗余产物，不入库）=====
+_trash_*/
 
 # ===== reflutter 大文件工作产物 =====
 reflutter_work/dump.dart
@@ -65,7 +69,9 @@ node_modules/
 .venv/
 .jcy-download-*/
 __pycache__/
+*.pyc
 *.log
 *.tmp
 .DS_Store
 Thumbs.db
+.workbuddy

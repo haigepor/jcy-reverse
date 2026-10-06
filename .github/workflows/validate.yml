@@ -41,4 +41,4 @@ jobs:
           python -m pip install "pycryptodome>=3.20,<4"
 
       - name: 协议层测试（含真机向量）
-        run: python packages/protocol/tests/test_channels.py
+        run: python tests/test_channels.py

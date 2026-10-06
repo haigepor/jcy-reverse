@@ -17,13 +17,14 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const IGNORED_TOP_LEVEL = new Set([".git", "node_modules", ".venv", ".workbuddy-ai"]);
+const IGNORED_TOP_LEVEL = new Set([".git", "node_modules", ".venv", ".workbuddy", ".workbuddy-ai",
+    "_trash_20260930", "libcore.so"]); // libcore.so 为本地二进制样本（.gitignore），不入库不登记
 const GLOB_CHARS = /[*?[\]{}]/;
 
-// 骨架区：源码/文档/配置目录，必须逐层在 README 目录树中登记，防止文档漂移
-const DEEP_DIR_ROOTS = [".github", "config", "docs", "packages", "python", "scripts"];
-// 产物区：逆向工作区，含大量中间产物，仅要求顶层登记，不强制逐层展开
-const ARTIFACT_DIR_ROOTS = ["apk", "out", "reflutter_work", "tools"];
+// 骨架区：源码/测试/文档/配置目录，必须逐层在 README 目录树中登记，防止文档漂移
+const DEEP_DIR_ROOTS = [".github", "assets", "config", "docs", "scripts", "src", "tests"];
+// 产物区：研究/工具工作区，含大量中间产物，仅要求顶层登记，不强制逐层展开
+const ARTIFACT_DIR_ROOTS = ["research", "reflutter_work", "tools"];
 
 const errors = [];
 const warnings = [];
@@ -100,7 +101,7 @@ function checkReadmeTree() {
 
 function collectDirs(rel, acc = []) {
   for (const item of fs.readdirSync(path.join(ROOT, rel), { withFileTypes: true })) {
-    if (!item.isDirectory()) continue;
+    if (!item.isDirectory() || item.name === "__pycache__") continue;
     const child = `${rel}/${item.name}`;
     acc.push(child);
     collectDirs(child, acc);
@@ -202,6 +203,7 @@ function checkSidebarCoverage() {
 
 const REQUIRED_FILES = [
   "README.md",
+  "MIGRATION.md",
   ".gitignore",
   ".gitattributes",
   ".editorconfig",
@@ -212,6 +214,8 @@ const REQUIRED_FILES = [
   "package.json",
   "pnpm-workspace.yaml",
   "config/tools.json",
+  "config/requirements.txt",
+  "config/requirements-analysis.txt",
   "scripts/bootstrap.mjs",
   "scripts/python-setup.mjs",
   "scripts/run-tests.mjs",
@@ -219,43 +223,59 @@ const REQUIRED_FILES = [
   "scripts/lib/python-env.mjs",
   "scripts/re-env/start_re_env.bat",
   "scripts/re-env/verify_env.py",
-  "python/requirements.txt",
-  "python/requirements-analysis.txt",
-  "packages/README.md",
-  "packages/protocol/README.md",
-  "packages/protocol/pyproject.toml",
-  "packages/protocol/jcy_protocol/__init__.py",
-  "packages/protocol/jcy_protocol/channels.py",
-  "packages/protocol/jcy_protocol/vectors.py",
-  "packages/protocol/tests/test_channels.py",
+  "src/README.md",
+  "src/pyproject.toml",
+  "src/jcy_protocol/__init__.py",
+  "src/jcy_protocol/auth.py",
+  "src/jcy_protocol/channels.py",
+  "src/jcy_protocol/vectors.py",
+  "tests/README.md",
+  "tests/test_channels.py",
+  "tests/test_auth_pure.py",
+  "tests/test_authgen.py",
   "docs/README.md",
   "docs/_sidebar.md",
   "docs/installation.md",
   "docs/structure.md",
+  "docs/architecture.md",
+  "docs/algorithm-auth.md",
+  "docs/reverse-journal-auth.md",
+  "docs/api/apipost-library.md",
+  "docs/api/apipost-testing.md",
+  "research/deliverables/authgen_server.py",
   "docs/scripts-index.md",
   "docs/setup/ldplayer-magisk-env.md",
   "docs/tags.md",
   "docs/git-push-prompt.md",
-  "out/client/gg_client.py",
-  "out/README.md",
+  "research/README.md",
+  "research/artifacts/README.md",
+  "research/toolchain/README.md",
+  "research/deliverables/README.md",
+  "research/deliverables/authgen.py",
+  "research/deliverables/client/gg_client.py",
+  "assets/README.md",
+  "assets/apk/README.md",
   "tools/README.md",
-  "apk/README.md",
   "reflutter_work/README.md",
 ];
 
 const REQUIRED_DIRS = [
   ".github/ISSUE_TEMPLATE",
   ".github/workflows",
+  "assets/apk",
   "docs/analysis",
   "docs/api",
   "docs/crypto",
   "docs/setup",
-  "out/client",
-  "out/demo",
-  "tools",
-  "packages",
-  "packages/protocol/jcy_protocol",
-  "packages/protocol/tests",
+  "research/artifacts",
+  "research/toolchain",
+  "research/deliverables",
+  "research/captures",
+  "research/corpus",
+  "research/reports",
+  "research/archive",
+  "src/jcy_protocol",
+  "tests/fixtures",
   "scripts/lib",
   "scripts/re-env",
 ];
