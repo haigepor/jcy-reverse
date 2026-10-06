@@ -19,7 +19,7 @@ pnpm test
 
 该命令依次执行：
 
-1. `scripts/run-tests.mjs` —— 运行 `packages/protocol/tests/test_channels.py`（10 项断言，含真机向量）
+1. `scripts/run-tests.mjs` —— 运行 `tests/test_channels.py`（10 项断言，含真机向量）
 2. `scripts/validate-structure.mjs` —— README 目录树 ↔ 文件系统双向校验 + 文档内链校验
 
 两项任一失败即退出码非 0。
@@ -58,8 +58,8 @@ pnpm test
 - **新增/删除顶层目录或文件后，必须同步更新 `README.md` 的目录树**，否则 `pnpm validate` 会失败（这是刻意设计，用于保证文档与结构不漂移）
 - 新增文档请登记到 `docs/_sidebar.md`，否则不会被文档站导航到
 - 新增工具请加入 `config/tools.json`，并在 `tools/README.md` 说明用途
-- 不要在 `out/` 中新增非分析产物；`out/` 是过程记录区
-- 可复用能力抽取到 `packages/`，不要复制 `out/client/` 的取证代码
+- 不要在 `research/` 中新增非分析产物；`research/` 是过程记录区
+- 可复用能力抽取到 `src/`，不要复制 `research/deliverables/client/` 的取证代码
 
 ## 禁止事项
 
