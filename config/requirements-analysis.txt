@@ -1,0 +1,11 @@
+# out/ 分析脚本依赖（实测统计：frida 51 处、PIL 8 处、numpy 1 处）
+#
+# 重要：frida 版本必须与设备端 frida-server 版本一致，否则 attach 失败。
+# 本项目设备端为 frida-server 17.8.2，故此处固定同版本。
+frida==17.8.2
+
+# full_run*.py 的截图与弹窗处理
+Pillow>=10,<12
+
+# 数值处理（内存扫描相关脚本）
+numpy>=1.26,<3

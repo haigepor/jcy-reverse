@@ -1,0 +1,26 @@
+[
+ {
+  "tag": "1080P/高清",
+  "status": 206,
+  "content_type": "video/mp4",
+  "content_range": "bytes 0-4095/217168708",
+  "got": 4096,
+  "latency_s": 0.24,
+  "magic": "0000001c6674797069736f6d00000200",
+  "ascii_head": "b'\\x00\\x00\\x00\\x1cftypisom\\x00\\x00\\x02\\x00isomiso2mp41\\x00\\x00\\x00\\x08free\\x0c\\xe1\\r\\x80mdat\\x00\\x00\\x00\\x08'",
+  "kind": "MP4(ftyp)",
+  "url": "https://1251413404.vod2.myqcloud.com/vodhk1251413404/5001834820046196136/qGifXkMbZbYA.mp4"
+ },
+ {
+  "tag": "4K/超清",
+  "status": 206,
+  "content_type": "video/mp4",
+  "content_range": "bytes 0-4095/459730607",
+  "got": 4096,
+  "latency_s": 0.13,
+  "magic": "0000001c6674797069736f6d00000200",
+  "ascii_head": "b'\\x00\\x00\\x00\\x1cftypisom\\x00\\x00\\x02\\x00isomiso2mp41\\x00\\x00\\x00\\x08free\\x1bVA\\x00mdat\\x00\\x00\\x00\\x08'",
+  "kind": "MP4(ftyp)",
+  "url": "https://v3.toutiaovod.com/8bbf0428b706ac64b571c54613d06252/6ac2c11d/video/tos/cn/tos-cn-v-0026/okeQhPfqQccCEfhCzFQM8B4z6lAWbuTAZBQVRj/"
+ }
+]

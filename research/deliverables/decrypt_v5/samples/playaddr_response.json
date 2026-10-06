@@ -1,0 +1,25 @@
+{
+ "_note": "2026-09-29 实测: 带 x-time/x-sign1/x-sign2/x-form 请求 samples/play_url.json 的 url, 服务端返回的真实 playAddr 列表 (首次请求, 明文 JSON)。最终直链 = m3u8FileDomain + addr, 实测 HTTP 200 / Content-Type: video/mp4 / Content-Length: 146763786, 响应体首 16 字节为 0000001c6674797069736f6d (ftypisom)。",
+ "code": 200,
+ "msg": "success",
+ "data": {
+  "playAddr": [
+   {
+    "title": "高清",
+    "desc": "1080P",
+    "vcodec": "H265",
+    "addr": "/458572a2161f4e099efd354b10212b47/6abace64/video/tos/cn/tos-cn-v-e874c6/ocIAXTDVEFTqERB08SEN92RLAf91fZ7TpNpzgC/",
+    "m3u8FileDomain": "https://v9.douyinvod.com",
+    "format": "MP4"
+   },
+   {
+    "title": "超清",
+    "desc": "4K",
+    "vcodec": "H265",
+    "addr": "/28614d1337f5ddd3386fd505ade9acb9/6abace63/video/tos/cn/tos-cn-v-0022c800/osnUb8AqeAE1rOLYWGzTKcCICIBGLCJAeB3Ere/",
+    "m3u8FileDomain": "https://v26.douyinvod.com",
+    "format": "MP4"
+   }
+  ]
+ }
+}

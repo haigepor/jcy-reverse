@@ -1,0 +1,4 @@
+{"tag": "hooked", "mode": "enc", "via": "export", "at": "0x737efb345080"}
+{"tag": "hooked", "mode": "dec", "via": "export", "at": "0x737efb345090"}
+{"tag": "modules", "list": ["boot-core-libart.oat@0x713e6000", "boot-core-icu4j.oat@0x71f2c000", "libjavacore.so@0x737e4dd41000"]}
+{"tag": "hooked", "mode": "rand", "via": "export", "at": "0x737efb341fd0"}

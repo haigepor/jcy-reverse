@@ -1,0 +1,11 @@
+{
+  "_comment": "authgen 回归自检向量。取自 2026-09-29 真机抓包 (research/captures/proxy_capture.jsonl 迁移后为 research/captures/)。",
+  "_note": "该抓包实例的 device_fp 与当前 research/artifacts/ 设备镜像不同，故只固化与 fp 无关的 ct0 与 O[0:32]。",
+  "ts": 1790618586109,
+  "input": "3.0.0.8-1790618586109-Android-1.5.8.0-16613a7076284a15bc723d018bcd67e1-default",
+  "auth_len": 152,
+  "body_len": 112,
+  "ct0_hex": "23754ae9d0cbe749f5441e769b45143e",
+  "o32_hex": "2b3ef9d5b6c78fd91e33fb5136486918f70e50af61d497be95acdd0fd7ffae85",
+  "auth_prefix24": "6MsfEg71pCxZ4ipNACeen/VL"
+}

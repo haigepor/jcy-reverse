@@ -1,0 +1,226 @@
+[
+ {
+  "uri": "/app/channel/?top-level=true",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9e85fa1118c6f1880dca05ec89d574a6f96c754af9a3488a04b0ababc3e38c80be2318222b2e1d99ad5d20da3362b2f732476b789dd8d2d8d3158234eee95f62397a964ce2fe362c15d8a4b2d7df750492f10dae282ea27b5c22cb7b896142f5c3",
+  "ts": "1790519239732",
+  "nonce": "28383225",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/channel?top-level=true",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9e85fa1118c6f1880dca05ec89d574a6f96c754af9a3488a04b0ababc3e38c80be2318222b2e1d99ad5d20da3362b2f732476b789dd8d2d8d3158234eee95f62397a964ce2fe362c15d8a4b2d7df750492f10dae282ea27b5c22cb7b896142f5c3",
+  "ts": "1790519239732",
+  "nonce": "28383225",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/banners/0",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9f3b0f8770ac9f87ff81503d0c9895012ea6dce992c5cbf5b9c2d25025dd61c1dbdec317359ca92e73febd15021c027761ab22b0ed7325ee9c6a78c427be2c11ad67124f452c13af385083e573bf13cfc1157f93f4c681c1e627086c4b9df451f4",
+  "ts": "1790519240109",
+  "nonce": "45471799",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/users/task",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9ff61c6c62afe75b9a7b03aacb66b6f99fbcbdbcb53440b9355954d7c646f6cd760a94ef7f1c7ef5cda69b40a38098feed21c41fc1607c92f8480cd3c2d9b79ece24105a6fa144953b196be4a5a3426092b25ee7e6d4424ca7615c6eb0e93f4e34",
+  "ts": "1790519239738",
+  "nonce": "69528040",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/messagebox/give_me",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9e14ecb1fc2024b284c9743271608d0da9d33a1856b8db52df09f1207cc3c0d5977073f29344f9f840a5e9f9cb02156c8aee3174d5d52c0f19e828d3fc1b6084a77f22593cc0763ca1343bcf8235a293d3e327b56752ef92be2bf35849d19ffad8",
+  "ts": "1790519239925",
+  "nonce": "96274209",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/video/list?channel=1&sort=weight&limit=6&page=1",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9f3b0f8770ac9f87ff81503d0c9895012ea6dce992c5cbf5b9c2d25025dd61c1dbdec317359ca92e73febd15021c027761ab22b0ed7325ee9c6a78c427be2c11ad67124f452c13af385083e573bf13cfc1157f93f4c681c1e627086c4b9df451f4",
+  "ts": "1790519240109",
+  "nonce": "45471799",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/video/list?channel=26&sort=weight&limit=6&page=1",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9e8a528fb274c27a1061cd63473854b2efa7ce10f1b710f0d9b6c1663025e87becb4b3a86ebc3825889c72de222b72a9fc13120631e19e5f75458c69161c5471c234e5b73696e90ab6020dd9f0daa270bdb71c07b8e5ea0217b8ee45d19bf7aa9b",
+  "ts": "1790519240117",
+  "nonce": "96601326",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/video/device-base",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9ff3a0d5197000616a3d5b13d3068db1db0c4161feafb4d8e09ccc210a281e9754814b3e6c3c218a00529858c468d803a1834160ced7538370bd7336669583a55dcff9cf9ed4393dc32792904b3b5ea67e5c5d5c43265aaa3a04754366e27bc43c",
+  "ts": "1790519240120",
+  "nonce": "14878324",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/video/list?channel=3&sort=weight&limit=6&page=1",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9f1594ac20d63eaf3dc90d84ce09f2086d43350ddf2bb847631c0e9c8dd6896bfd7350d847d8a4ed6c70bdeb7357e87ee1917edc6741460648fd1588a15b6a54acc1ae16fb0d7961b545d62669eaaca072fab00b6ea63198020d2429a99f44c653",
+  "ts": "1790519240124",
+  "nonce": "77512009",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/history/localcahce",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9f1594ac20d63eaf3dc90d84ce09f2086d43350ddf2bb847631c0e9c8dd6896bfd7350d847d8a4ed6c70bdeb7357e87ee1917edc6741460648fd1588a15b6a54acc252be0c816865a2119f034275b1f7e98593468ac2bf50a252f313e0ac4a3327",
+  "ts": "1790519240124",
+  "nonce": "11059285",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/video/list?channel=2&sort=weight&limit=6&page=1",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9d46059e409e90f26387ee123b2eaba4185af914253af6968f8b63cb0c58f587617a7b496bdce7ab048ab7ef7ae8ad15a271bd86f88a34063a4abcb71d99c2dbcef97d036039b3491fb6ea296cc71265950ad74585ffa6e0661d0737183059fa3f",
+  "ts": "1790519240126",
+  "nonce": "13666553",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/video/record",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9ed8685f918dcfee37cbe6c878ddc4c9dbc0955bc67a10dd12fba3287b01c41ef4d5e97a2d433835cbac90b3d8e0295d7a5c9f61aaaa856d980acba2225be5237f1a2f348304d3f7503307d04ff1dc3e0c78ec1f8005dee81eef6e50856084a3af",
+  "ts": "1790519240166",
+  "nonce": "12262494",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/config",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9cffe59377481efb0f03a9723eca8242b4a1c21775509dd3194e74d3e4e306fa20704e02067940dafc981a9c59929dd05ae870408754a647138be8e829717756fe0865aaa5189ecf4b96e96646808ce1ee9911836a35ddef1de6b1057a6d3b364c",
+  "ts": "1790519240431",
+  "nonce": "70692948",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/config/channel",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9d4e90e493f754fc7e9cf4bf6ef4f7e6b357492866f4d0404b93f32a318050f02bea0ffcdfb73462bd0e4fcb5a982b6645cf2eeff611ba7481f5c47f77326f443e7eaa2f2f6314532ed3dac7c237b7ea62aee5575f1d2a7a05380f237e5ef3dbe0",
+  "ts": "1790519241138",
+  "nonce": "78518757",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/users/clearimg",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9c5222f60c418ec24bc6d19a5d482f61233a1f91c96bbe57639a96fe7d55fe2d2d5ed17ab3559196f6bfc1e21fc065be6e477fa24ac3b6986aa33277b6089ccbaf391a39d38096059b7db911cf9f3e01c06f6dc3cd6e0a9ba84cec668abbb7a04b",
+  "ts": "1790519241369",
+  "nonce": "93368471",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/video/detail?id=113244",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9eb3b49c71a44786cadaad99f730e4b90fd8c34f86b8651f9e772b220ab8ea130822434c3e156bab0799b0e8dbb2dffc3c806e74240bfd0f475bbadba0609835797b4abd4938d6a12312825c54bb29295d34cb93a5cc041972e668364021af1ac8",
+  "ts": "1790519283502",
+  "nonce": "43374464",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/video/list?channel=1&sort=addtime&limit=10&page=1",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9d37be7eedc32095decdda08a5f75432642e49802d82e6ff760ea473e6c3a8ca14e1a21634edb3b688c6987fc8e6fbb0b938afcd2f741a0fb6da79e1465a79f4d3967ec5702d4a37bed07cda612fdfa591881348e5fb1ca77b7c3db4ffba24e0d8",
+  "ts": "1790519283821",
+  "nonce": "86552407",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/video/record",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9eb4cdb02a357807bbe873d8781abede4a64715cad1ed6b3c64e6b054391a27b124b828ab9fdbc49590881c892088f24bcf53d19f2ffbf3d41345d6cdc4dd56bcd445fe58c3e454554910fea3ccdadba3e06c7dfa1c374e709d9bfaa366a131dfb",
+  "ts": "1790519326922",
+  "nonce": "52210524",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/video/play-connect",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9f106133f7a6f62a8215596c2bac28d4203c92aabbe46b4b008d40028efb2a1a1a0698f3f12aac88f8df519e162ed6527cd5c2f0a8969c6ed9bcad53ae88d052b215ee73c5ea888dda854700993bbb664b323578d9d9034c2861cd401245a99b77",
+  "ts": "1790519327118",
+  "nonce": "23158829",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/messagebox/give_me",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9e1b405b520555c6cb7a3ab2314aef4f31a92130e9836b39e1365eb4ed9274bfe1d641c8bc7a765a8aa077cfc417764952cb306339604ce41dbbf261ca16e765c2f9b0aad0c97b8780c6d30c60a51aa862ea204c3273aed2fb3a4866d211fa2727",
+  "ts": "1790519327267",
+  "nonce": "75375650",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/video/play?id=113244&play=mp4&part=%E7%AC%AC1%E9%9B%86",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9eb8a109dea6cdc0c2617ab5e9ea76991baf989d968a5c28adb8676a2db0bb5d89a2d8583a0cc533df417288e2f67b1c66b7f5ecdc9a51fd09335d4fdf9b7f9fef0714d366aa337825d8fc51830407e763da55a13aec0d618e5a97422e3f2e9cff",
+  "ts": "1790519327911",
+  "nonce": "14224829",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/video/device-base",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9ff2a9d84feadbd95691de4b7e16c619319dd8c3f525dc281e36e363208cd06269ee1a6d3ee42c0537b597384f71c46c683a88981aeb9d198f9bde59dd92d6ff73be81ea49a03e2abc65ace5ca2415891e649374054589087a1f0d5c45d19e7f3f",
+  "ts": "1790519328207",
+  "nonce": "49868672",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/messagebox/give_me",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9e80c6b7545dbf22a190776225e135b5021acd1a9210ca057a3b57e834567287302f6d6db0dd5be59878b25e14f26ebb40d9bd4d39904ad1fb878e6df1b75ee4bf43ab143d5b29300e4ce716d1d7882b55cdf9b1c56e2e9f26a2ef043bf49d990b",
+  "ts": "1790519356508",
+  "nonce": "72015672",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/messagebox/give_me",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9d46663d16a93ddd6b89a4d3354137b7f6bcbfa163ee340c280084bf284a3226d1646835832c8f071f9560cf179f5f73a6214468f69aa32197d09371e1c1861f121906d629f1f23c7ec30479f344dd0c70e0f989dc89a377a5962dee560d8680c3",
+  "ts": "1790519363659",
+  "nonce": "93773691",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/messagebox/give_me",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9f34c759eeb0b1faad1447572b683f9a43f2f114f1e1f58216bea1862ce6dd14a70e23b94cf7947333b3c1ee17edb2b157cd679347f10c8eb9d9ce3f98864a04cd210d2e0ae2dbb3789992d27ee5e2bd7a82aaf12bd02cc08734fd06177de02f13",
+  "ts": "1790519368219",
+  "nonce": "23765462",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/danmu?vid=113244&play=mp4&part=%E7%AC%AC1%E9%9B%86&start_time_point=0&end_time_point=60000",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9f37a7373c1f532fefd092cf13ae85a4cc44cc6d2c5fe23172b45abefbd7952a2deba6822205d9cfe6bd9e922db2450ba12af5998fb814979e5ab76e007849ccb76acaec3ec340f3e473a8a85e12140bdc29c33ada740c89457fd105be0209493b",
+  "ts": "1790519370559",
+  "nonce": "46859650",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/danmu?vid=113244&play=mp4&part=%E7%AC%AC1%E9%9B%86&start_time_point=60000&end_time_point=120000",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9e1f3df783ec0d46c5c3de75262988e677d1fea9bb45270b11a403f6a591f7aec9c95c92723d34d5e696eb1db6d5d46ac0514d2fcf0459895b6bde21264c066fced4d415eab48b9aad5a7322b3e066b3110cb5848f7c4331754a8a50f5f69b22a3",
+  "ts": "1790519370946",
+  "nonce": "35317390",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ },
+ {
+  "uri": "/app/danmu?vid=113244&play=mp4&part=%E7%AC%AC1%E9%9B%86&start_time_point=120000&end_time_point=180000",
+  "auth_hex": "e8cb1f120ef5a42c59e22a4d00279e9ed191d4137fa57ec236d4980da6f92381818691e2f35c61429bfd67775ae812dd99d2f74d5bccfc8a2ad7720338280cc078df41abf69bb772c9966798c477ace08261d260fd687a1bcd6ab79c70a26ed75a31f75d92c98937fdd4899718d57f43",
+  "ts": "1790519430913",
+  "nonce": "61354585",
+  "tcs": "2",
+  "xver": "2020-09-17"
+ }
+]

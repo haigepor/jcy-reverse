@@ -1,0 +1,237 @@
+{
+ "config": {
+  "code": 20000,
+  "message": "请求成功!",
+  "data": [
+   {
+    "id": 5,
+    "title": "mupao",
+    "value": "[\"mupao\"]",
+    "action": "mupaoplayer"
+   },
+   {
+    "id": 6,
+    "title": "下载页",
+    "value": "https://jocy2024.com/",
+    "action": "downhtml"
+   },
+   {
+    "id": 13,
+    "title": "影片封面地址",
+    "value": "",
+    "action": "coverurl"
+   },
+   {
+    "id": 14,
+    "title": "防刷验证码",
+    "value": "{\"comment_captcha\":{\"state\":true,\"interval\":60,\"max_count\":1},\"danmu_captcha\":{\"state\":true,\"interval\":30,\"max_count\":1},\"register_ip_captcha\":{\"state\":true,\"interval\":5,\"max_count\":1}}",
+    "action": "captcha"
+   },
+   {
+    "id": 15,
+    "title": "内容校验",
+    "value": "{\"speak_threshold\":{\"state\":true,\"min_comment_num\":500,\"min_danmu_num\":500},\"content_length\":{\"state\":false,\"min_comment_length\":5,\"min_danmu_length\":5}}",
+    "action": "context_limiter"
+   },
+   {
+    "id": 16,
+    "title": "用户登录配置",
+    "value": "{\"single_point\":false,\"expires_at\":604800,\"buffer_time\":86400,\"app_platform\":{\"v1_disable\":false,\"login_captcha_config\":{\"enable\":true}},\"tv_platform\":{\"login_captcha_config\":{}},\"pc_platform\":{\"login_captcha_config\":{}}}",
+    "action": "user_config"
+   },
+   {
+    "id": 21,
+    "title": "lua_header",
+    "value": "function getHeaders(url) \n headers = {} \n headers[\"User-Agent\"] = \"Xiaomi-Redmi Note 11 5G__weibo__14.2.0__android__android11_wifi\" \n return headers \nend",
+    "action": "lua_header"
+   },
+   {
+    "id": 24,
+    "title": "直播设置",
+    "value": "{\"tvShow\":true,\"pcShow\":true,\"needVip\":true,\"condition\":{\"is_duration\":true,\"duration\":5}}",
+    "action": "live"
+   },
+   {
+    "id": 0,
+    "title": "播放标识",
+    "value": "[]",
+    "action": "catplayer"
+   },
+   {
+    "id": 0,
+    "title": "第三方播放标识",
+    "value": "[]",
+    "action": "rrysplayer"
+   },
+   {
+    "id": 0,
+    "title": "访问控制",
+    "value": "https://sns-video-hw.xhscdn.com/spectrum/1040g35831j08rhqhhi0g5pq95iti1acbeluigu8",
+    "action": "access_control"
+   },
+   {
+    "id": -3,
+    "title": "风控控制",
+    "value": "{\"hook_cfg\":{\"enable\":false},\"apk_sign\":{\"enable\":false}}",
+    "action": "risk_control"
+   }
+  ]
+ },
+ "list_first": {
+  "id": 113459,
+  "cid": 1,
+  "name": "来自远方",
+  "ename": "彼方から,Kanata kara,From Far Away,From the Other Side,来自远方,异境奇缘",
+  "area": "日本",
+  "year": "2026",
+  "continu": "1|周一00:00更",
+  "total": 0,
+  "isend": 0,
+  "pic": "http://p3.qhimg.com/t11fd4c33011bf401b5f987dedc.jpg",
+  "type": "奇幻,异世界,穿越,冒险,恋爱,漫画改",
+  "up": 0,
+  "down": 0,
+  "actor": "黑泽朋世,熊谷健太郎,梅原裕一郎,竹内荣治,齐藤贵美子",
+  "director": "阿部记之",
+  "ischarge": 0,
+  "updated_at": "2026-10-05T03:16:41+08:00",
+  "content": "过着极其平凡日子的女高中生·立木典子，某天早晨仿佛被不可思议的梦境引导一般，迷失到了一个陌生的异世界。\n　　在这个语言不通、常识也不管用的世界里，救下无处可去、只能四处彷徨的典子的，是独自一人旅行的流浪战士·伊札克。\n　　与此同时，世界各地都在流传着“能够唤醒带来毁灭的‘天上鬼’的人出现了”、“必须比任何国家都先得到手”的传言。\n　　所谓的觉醒，以及天上鬼到底是什么——\n　　仿佛知晓答案一般，伊札克看着典子喃喃自语道。\n　　“我必须杀了这个女孩。”\n　　尽管语言和文化都存在隔阂，两人之间依然一点点萌生了细微的羁绊。\n　　这样的两人，最终将被卷入宏大的命运旋涡之中——。"
+ },
+ "detail": {
+  "code": 20000,
+  "message": "请求成功!",
+  "data": {
+   "id": 113459,
+   "created_at": "2026-09-24T20:10:00+08:00",
+   "updated_at": "2026-10-05T03:16:41+08:00",
+   "created_by": 0,
+   "updated_by": 0,
+   "source": "cms10",
+   "fid": 111968,
+   "cid": 1,
+   "name": "来自远方",
+   "ename": "彼方から,Kanata kara,From Far Away,From the Other Side,来自远方,异境奇缘",
+   "title": "",
+   "keywords": "",
+   "actor": "黑泽朋世,熊谷健太郎,梅原裕一郎,竹内荣治,齐藤贵美子",
+   "director": "阿部记之",
+   "content": "过着极其平凡日子的女高中生·立木典子，某天早晨仿佛被不可思议的梦境引导一般，迷失到了一个陌生的异世界。\n　　在这个语言不通、常识也不管用的世界里，救下无处可去、只能四处彷徨的典子的，是独自一人旅行的流浪战士·伊札克。\n　　与此同时，世界各地都在流传着“能够唤醒带来毁灭的‘天上鬼’的人出现了”、“必须比任何国家都先得到手”的传言。\n　　所谓的觉醒，以及天上鬼到底是什么——\n　　仿佛知晓答案一般，伊札克看着典子喃喃自语道。\n　　“我必须杀了这个女孩。”\n　　尽管语言和文化都存在隔阂，两人之间依然一点点萌生了细微的羁绊。\n　　这样的两人，最终将被卷入宏大的命运旋涡之中——。",
+   "area": "日本",
+   "year": "2026",
+   "continu": "1|周一00:00更",
+   "total": 0,
+   "isend": 0,
+   "end_at": "",
+   "letter": "L",
+   "type": "奇幻,异世界,穿越,冒险,恋爱,漫画改",
+   "pic": "http://p3.qhimg.com/t11fd4c33011bf401b5f987dedc.jpg",
+   "status": 1,
+   "auto_play": 0,
+   "state": "预告片",
+   "stars": 0,
+   "version": "高清版",
+   "up": 0,
+   "down": 0,
+   "ischarge": 0,
+   "hits": 931,
+   "weight": 100,
+   "gold": 9,
+   "danmu_count": 1000,
+   "is_sync_charge": 0,
+   "parts": [
+    {
+     "play": "mp4",
+     "play_zh": "线路3",
+     "single_clarity_display": 0,
+     "oid": 1,
+     "part": [
+      "第1集"
+     ]
+    }
+   ],
+   "charges": {
+    "mp4": {}
+   },
+   "iscollect": 0,
+   "comment_total": 33
+  }
+ },
+ "play": {
+  "code": 20000,
+  "message": "请求成功!",
+  "data": [
+   {
+    "play": "mp4",
+    "play_zh": "线路3",
+    "single_clarity_display": 0,
+    "part": "第1集",
+    "auto_play": 0,
+    "url": "6157c9c16182997848431|f1b1811956986|0101c304d5f96|9214e904e808e2",
+    "parse": "-- 基础配置信息\r\nlocal config = {\r\n  version = device_info[\"app_version\"] or \"unknown\",\r\n  platform = device_info[\"platform\"] or \"Unknown\",\r\n  aes_key = \"rdcibneoapyspqlt\", -- AES 加密密钥\r\n  aes_iv = \"fyoofrebaxjwioxn\"  -- AES 初始向量\r\n}\r\n\r\n-- 生成签名：md5(参数 + 固定盐 + 时间戳)\r\nlocal function sign(data, ts)\r\n  return utils.md5(data .. \"pzizhsqjjt\" .. ts)\r\nend\r\n\r\n-- 根据 URL 或 URL 数组生成 每个链接的专属请求头\r\nfunction custom_head(url_items)\r\n  local headers_map = {}\r\n\r\n  for _, item in ipairs(url_items) do\r\n    local url = item.url\r\n    local header = {}\r\n    header[\"User-Agent\"] = \"\"\r\n\r\n    header[\"Referer\"] = url\r\n    if string.find(url, \"aliyuncs.com\") then\r\n      header[\"Referer\"] = \"https://www.piccopilot.com\"\r\n    elseif string.find(url, \"toutiaovod.com\") then\r\n      header[\"Referer\"] = \"\"\r\n    elseif string.find(url, \"kwimgs.com\") then\r\n      header[\"Referer\"] = \"https://www.kuaishou.com\"\r\n    elseif string.find(url, \"dcarvod.com\") then\r\n      header[\"Referer\"] = \"https://www.dongchedi.com\"\r\n    elseif string.find(url, \"douyinvod.com\") then\r\n      header[\"Referer\"] = \"https://www.douyin.com\"\r\n    end\r\n\r\n    headers_map[url] = header\r\n  end\r\n\r\n  return headers_map\r\nend\r\n\r\n-- 安全封装 httpGet：防止异常中断，失败返回 nil\r\nlocal function safe_http_get(url, opts)\r\n  local ok, res = pcall(function() return httpGet(url, opts or {}) end)\r\n  if ok and res and res ~= \"\" then\r\n    return res\r\n  else\r\n    return nil\r\n  end\r\nend\r\n\r\n-- 尝试解码 JSON，失败返回 nil\r\nlocal function decode_json_safe(data)\r\n  local obj, _, err = json.decode(data, 1, nil)\r\n  if err then return nil end\r\n  return obj\r\nend\r\n\r\n-- 响应解析器：优先普通 JSON，失败则尝试解密再解析\r\nlocal function parse_response(data)\r\n  local obj = decode_json_safe(data)\r\n  if obj then return obj end\r\n  local dec = utils.aes128cbc_decrypt(config.aes_key, config.aes_iv, data)\r\n  return decode_json_safe(dec)\r\nend\r\n\r\n-- 主解析函数：处理视频 URL 获取真实播放地址\r\n-- ⬇️ 签名 + 请求函数等你自己保留\r\nfunction parser(source)\r\n  local parsers = {\r\n    \"http://yh.jx.xajtl.com/vo1v03.php?url=\"\r\n  }\r\n\r\n  local timestamp = utils.timestamp()\r\n  local modified_source = source .. \"&t=\" .. timestamp\r\n\r\n  for i = 1, #parsers do\r\n    local get_header = {\r\n      [\"x-time\"] = timestamp,\r\n      [\"x-form\"] = config.platform,\r\n      [\"x-sign1\"] = sign(config.version, timestamp),\r\n      [\"x-sign2\"] = sign(source, timestamp)\r\n    }\r\n\r\n    local full_url = parsers[i] .. modified_source\r\n    local jsonData = safe_http_get(full_url, { header = get_header })\r\n\r\n    if not jsonData then goto continue end\r\n\r\n    local obj = parse_response(jsonData)\r\n\r\n    if obj and (obj.code == 200 or obj.code == \"200\") then\r\n\r\n      -- ✅ 新结构：多清晰度 playAddr\r\n      if obj.data and obj.data.playAddr and type(obj.data.playAddr) == \"table\" then\r\n        local full_urls = {}\r\n\r\n        for _, item in ipairs(obj.data.playAddr) do\r\n          local domain = item.m3u8FileDomain or \"\"\r\n          local path = item.addr or \"\"\r\n          if domain ~= \"\" and path ~= \"\" then\r\n            local full_url = domain .. path\r\n            table.insert(full_urls, {\r\n              url = full_url,\r\n              raw = item\r\n            })\r\n          end\r\n        end\r\n\r\n        -- 构建清晰度多选列表\r\n        local url_array = {}\r\n        for _, item in ipairs(full_urls) do\r\n          local raw = item.raw\r\n          local u = item.url\r\n        \r\n          local desc = raw.desc or \"\"\r\n          local title = raw.title or \"\"\r\n          local name = desc .. (desc ~= \"\" and \" \" or \"\") .. title\r\n          \r\n          table.insert(url_array, {\r\n            name = name,\r\n            url = u,\r\n            height = raw.height or 0,\r\n            width = raw.width or 0,\r\n          })\r\n        end\r\n\r\n        return \"OK\", json.encode(url_array), \"{}\", \"multi\"\r\n\r\n      -- ✅ 老结构：单个 URL\r\n      elseif obj.url and obj.type then\r\n        local headers_map = custom_head({ { url = obj.url } })\r\n        local headers = headers_map[obj.url] or {}\r\n        return \"OK\", obj.url, json.encode(headers), obj.type\r\n      end\r\n    end\r\n\r\n    ::continue::\r\n  end\r\n\r\n  return \"ERROR\", \"\", \"\", \"\"\r\nend",
+    "ps": 1,
+    "extension": {
+     "player": "mp4",
+     "url": "6157c9c16182997848431|f1b1811956986|0101c304d5f96|9214e904e808e2",
+     "extra": null
+    },
+    "completeness": 2,
+    "total_duration": -1,
+    "resolution": "默认",
+    "lua_header": {
+     "User-Agent": "Dart/3.6 (dart:io)"
+    },
+    "lua_type": "",
+    "vip_type": 0
+   }
+  ]
+ },
+ "parser": {
+  "url": "http://yh.jx.xajtl.com/vo1v03.php?url=6157c9c16182997848431|f1b1811956986|0101c304d5f96|9214e904e808e2&t=1791141810168",
+  "status": 200,
+  "body_head": "{\"code\":200,\"msg\":\"success\",\"data\":{\"playAddr\":[{\"title\":\"\\u9ad8\\u6e05\",\"desc\":\"1080P\",\"vcodec\":\"H265\",\"addr\":\"\\/vodhk1251413404\\/5001834820046196136\\/qGifXkMbZbYA.mp4\",\"m3u8FileDomain\":\"https:\\/\\/1251413404.vod2.myqcloud.com\",\"format\":\"MP4\"},{\"title\":\"\\u8d85\\u6e05\",\"desc\":\"4K\",\"vcodec\":\"H265\",\"addr",
+  "aes_key": "rdcibneoapyspqlt",
+  "aes_iv": "fyoofrebaxjwioxn"
+ },
+ "parser_obj": {
+  "code": 200,
+  "msg": "success",
+  "data": {
+   "playAddr": [
+    {
+     "title": "高清",
+     "desc": "1080P",
+     "vcodec": "H265",
+     "addr": "/vodhk1251413404/5001834820046196136/qGifXkMbZbYA.mp4",
+     "m3u8FileDomain": "https://1251413404.vod2.myqcloud.com",
+     "format": "MP4"
+    },
+    {
+     "title": "超清",
+     "desc": "4K",
+     "vcodec": "H265",
+     "addr": "/8bbf0428b706ac64b571c54613d06252/6ac2c11d/video/tos/cn/tos-cn-v-0026/okeQhPfqQccCEfhCzFQM8B4z6lAWbuTAZBQVRj/",
+     "m3u8FileDomain": "https://v3.toutiaovod.com",
+     "format": "MP4"
+    }
+   ]
+  }
+ },
+ "playAddr": [
+  {
+   "title": "高清",
+   "desc": "1080P",
+   "vcodec": "H265",
+   "addr": "/vodhk1251413404/5001834820046196136/qGifXkMbZbYA.mp4",
+   "m3u8FileDomain": "https://1251413404.vod2.myqcloud.com",
+   "format": "MP4"
+  },
+  {
+   "title": "超清",
+   "desc": "4K",
+   "vcodec": "H265",
+   "addr": "/8bbf0428b706ac64b571c54613d06252/6ac2c11d/video/tos/cn/tos-cn-v-0026/okeQhPfqQccCEfhCzFQM8B4z6lAWbuTAZBQVRj/",
+   "m3u8FileDomain": "https://v3.toutiaovod.com",
+   "format": "MP4"
+  }
+ ]
+}
