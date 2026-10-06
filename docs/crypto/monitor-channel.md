@@ -65,7 +65,7 @@ native `call` 的第一个参数即 b64 密文字符串 (frida 实测每次心�
 
 ```python
 from gg_client import MON_KEY, MON_IV, channel_decrypt
-# 解密一条真实心跳 (截取自 out/ffi_log.jsonl)
+# 解密一条真实心跳 (截取自 research/ffi_log.jsonl)
 frame = "<556字符b64密文>"
 print(channel_decrypt(frame, MON_KEY, MON_IV))
 ```
@@ -73,6 +73,6 @@ print(channel_decrypt(frame, MON_KEY, MON_IV))
 ## 抓取方法
 
 ```bash
-# frida hook (见 out/gg_ffi_hook.js)
+# frida hook (见 research/gg_ffi_hook.js)
 objection/frida attach 后 hook libcore.so!call 的 onEnter(args[0].readCString())
 ```

@@ -48,5 +48,5 @@ Body: (会话 key 加密)
 
 ## 真机捕获
 
-- device-base 请求/响应均在真机 apiDecrypt hook 捕获 (out/key_log.jsonl)
+- device-base 请求/响应均在真机 apiDecrypt hook 捕获 (research/key_log.jsonl)
 - 响应密文: 会话 key 加密, 解密需运行时 key

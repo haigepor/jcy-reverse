@@ -1,15 +1,32 @@
 # 分析脚本索引
 
-`out/` 目录下共 **104 个脚本**，是逆向过程的完整工作记录。本索引按功能族归类。
+本索引按功能族归类研究区脚本。**2026-09-30 目录重构后**，脚本分布为：
 
-> 分类依据：脚本头部注释、实际 import 依赖、`docs/analysis/toolchain.md` 记载的构建过程。
+| 位置 | 内容 | 数量 |
+|---|---|---|
+| [`research/toolchain/`](../research/toolchain/README.md) | 当前活跃的分析工具（Unicorn 模拟器、探针、追踪、反汇编） | 36 |
+| [`research/deliverables/`](../research/deliverables/README.md) | 对外交付（`authgen`、app 级客户端 `jcy_api`、三通道解密、验证脚本） | 18 |
+| `research/archive/legacy-scripts/` | 早期阶段脚本（frida hook 族、驱动、爆破等），**只读归档** | ~100 |
+
+> 分类依据：脚本头部注释、实际 import 依赖、[`analysis/toolchain.md`](analysis/toolchain.md) 记载的构建过程。
 > 同名带数字后缀（如 `gg_dart_hook2`）为**迭代版本**，数字越大越接近最终可用版本。
+> 旧路径 `out/` 的对照关系见 [`../MIGRATION.md`](../MIGRATION.md)。
 
-## 一、Dart 快照 Hook（15 个）
+## 〇、当前活跃工具（research/toolchain/）
+
+见 [`research/toolchain/README.md`](../research/toolchain/README.md)。要点：
+
+- `paths.py` — 统一路径解析（所有研究区脚本的唯一路径入口）
+- `emu_v11.py` / `emu_v14.py` — libcore.so 的 Unicorn 模拟器
+- `probe_D.py` — 受控实验主入口（`A1HEX` / `KEYHEX` / `IVHEX` / `TAG`）
+- `trace304.py` / `trace_E.py` / `trace_sbox.py` — 调用树与 S-box 读取追踪
+- `sm4.py` / `brute_E.py` — 排除性验证与算法爆破
+
+## 一、Dart 快照 Hook（15 个，归档）
 
 通过 reFlutter dump offset 定位并 hook Dart AOT 函数，还原方法名与地址。
 
-地址换算（`out/gg_dart_hook.js` 头部注明）：
+地址换算（`research/gg_dart_hook.js` 头部注明）：
 
 ```
 运行时地址 = libapp.so base + 0x4b6b40 (isolate instructions st_value) + dump offset
@@ -104,9 +121,9 @@ hook `vmplugin.invoke_method` 等 FFI 边界，捕获跨语言调用的明文与
 编译：`g++ -O3 -march=native -o cscan.exe cscan.c`（MinGW）。
 编译产物 `.exe` 不入库，见 `.gitignore`。
 
-## 十一、工程脚本（`scripts/`，不在 `out/`）
+## 十一、工程脚本（`scripts/`，不在 `research/`）
 
-上述 104 个脚本位于 `out/`（逆向过程记录）。环境与质量保障脚本另置于 `scripts/`：
+上述 104 个脚本位于 `research/`（逆向过程记录）。环境与质量保障脚本另置于 `scripts/`：
 
 | 文件 | 说明 |
 |---|---|
@@ -126,7 +143,7 @@ hook `vmplugin.invoke_method` 等 FFI 边界，捕获跨语言调用的明文与
 | `PIL` (Pillow) | 8 | 截图与弹窗处理（`full_run*.py`） |
 | `Crypto` (pycryptodome) | 6 | 解密验证与协议库 |
 | `numpy` | 1 | 数值处理 |
-| `requests` | — | `out/client/gg_client.py` HTTP 层 |
+| `requests` | — | `research/deliverables/client/gg_client.py` HTTP 层 |
 
 安装：
 
@@ -137,7 +154,7 @@ pnpm python:install:analysis   # 分析：追加 frida / Pillow / numpy
 
 ## 复现建议
 
-1. 先跑 `packages/protocol/tests/test_channels.py` 确认协议层可用
-2. 静态分析走 `tools/apktool.jar` + `tools/jadx`，产物落 `out/base_smali` / `out/jadx_src`
+1. 先跑 `tests/test_channels.py` 确认协议层可用
+2. 静态分析走 `tools/apktool.jar` + `tools/jadx`，产物落 `research/base_smali` / `research/jadx_src`
 3. 动态分析需要 arm64 真机或原生 ARM 模拟器（x86_64 转译层会 SIGSEGV，见 `docs/analysis/toolchain.md`）
 4. hook 脚本按族取**数字最大的迭代版**作为起点，再按需裁剪

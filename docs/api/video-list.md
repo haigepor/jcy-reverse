@@ -62,5 +62,5 @@ App 首页/频道页
 | 方式 | 结果 |
 |---|---|
 | 离线重放 (旧 token) | ✗ 403501/403502 (token 绑定 ts/nonce) |
-| 真机 hook 捕获响应密文 | ✅ 已捕获 (out/key_log.jsonl, /app/config/video 与列表同族) |
+| 真机 hook 捕获响应密文 | ✅ 已捕获 (research/key_log.jsonl, /app/config/video 与列表同族) |
 | 完整解密 | 需会话 key (见 [HTTP body](../crypto/http-body.md) 遗留项) |

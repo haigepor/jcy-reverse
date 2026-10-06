@@ -56,7 +56,7 @@
 
 ## 密钥常量在二进制中的位置
 
-blutter 对象池 (out/blutter_out/pp.txt)：
+blutter 对象池 (research/artifacts/blutter_research/pp.txt)：
 
 ```
 [pp+0x7000] String: "kFGTbLlOzFHQCIKp"     ← 信令 key
@@ -76,7 +76,7 @@ blutter 对象池 (out/blutter_out/pp.txt)：
 
 ## Python 实现
 
-见 `out/client/gg_client.py` 第二阶段加密层：
+见 `research/deliverables/client/gg_client.py` 第二阶段加密层：
 
 ```python
 from gg_client import channel_encrypt, channel_decrypt, SIG_KEY, SIG_IV, MON_KEY, MON_IV

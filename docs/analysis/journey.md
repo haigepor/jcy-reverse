@@ -5,7 +5,7 @@
 
 ## 阶段〇：基线与环境
 
-- 样本: `apk/base.apk` SHA256 `AC170C12...C5CBB9` (未动)，applicationId `com.tudou.tool`，
+- 样本: `assets/assets/apk/base.apk` SHA256 `AC170C12...C5CBB9` (未动)，applicationId `com.tudou.tool`，
   smali 包 `app.video.guoguo`，Flutter 3.27.x / Dart 3.6.0
 - 设备: 华为 LLD-AL20 (EMUI, Android 10, 1080×2340)，adb 有线
 - 工具: Python 3.13 (pyelftools/capstone/pycryptodome/frida 17)、MinGW g++、cmake、ninja、
@@ -20,7 +20,7 @@
 ## 阶段一：静态面 (第一会话)
 
 1. **apktool/jadx 解包** → 端点全集 (40+)、`vmplugin.invoke_method` Lua 桥 (md5/aes128cbc/base64/httpGet)、
-   windmill 广告插件。产出 `out/jadx_src`、初版 API_ANALYSIS.md。
+   windmill 广告插件。产出 `research/jadx_src`、初版 API_ANALYSIS.md。
 2. **libcore.so 监控通道发现**: 导出 `init`/`call`，EVP hook 460 次捕获
    key=`qPwClBj7j7ZQraSm` iv=`p3JdVQl3q7WQJIgG` (AES-128-CBC)，2 秒心跳，416B 诱饵 JSON。
 3. **auth 头结构**: 112B = 15B 常量前缀 `e8cb1f12...` + 1B flag + 96B 密文。

@@ -32,11 +32,11 @@ pnpm tools:status        # 查看安装状态
 ## 典型工作流
 
 ```
-apk/base.apk ──apktool──▶ out/base_smali(_patched)/ ──uber-apk-signer──▶ 设备安装
+assets/assets/apk/base.apk ──apktool──▶ research/base_smali(_patched)/ ──uber-apk-signer──▶ 设备安装
      │
-     └──blutter──▶ out/blutter_out/（pp.txt 对象池 + asm）
+     └──blutter──▶ research/artifacts/blutter_research/（pp.txt 对象池 + asm）
                     │
-                    └──frida(libgadget)──▶ out/gg_*.js hook 脚本族
+                    └──frida(libgadget)──▶ research/gg_*.js hook 脚本族
 ```
 
 > 恢复环境时，按上表链接下载并放置到对应子目录即可。

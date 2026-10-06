@@ -1,135 +1,148 @@
-# 囧次元 (com.tudou.tool) 逆向工程
+# 囧次元逆向工程 (jcy-reverse)
 
-Flutter 壳 + 自研加密协议的视频 App 完整逆向工程项目。
-目标样本: versionName 1.5.8.0 (Dart 3.6.0 / Flutter 3.27.x)。
+Android 应用 **囧次元**（`com.tudou.tool`，Flutter / Dart AOT 3.6.0 arm64，versionName 1.5.8.0）
+的逆向研究工程：协议取证、加密通道还原、`authentication` 头算法完全破解与离线生成器。
+
+> **本仓库是研究记录 + 可运行工具链，不是产品代码。**
+> 目录分层与数据流见 [`docs/structure.md`](docs/structure.md)；
+> 系统架构与模块职责见 [`docs/architecture.md`](docs/architecture.md)；
+> `authentication` 算法原理与用法见 [`docs/algorithm-auth.md`](docs/algorithm-auth.md)。
+
+---
+
+## 目录结构
+
+```
+囧次元/
+├── README.md                     项目总览（本文件）
+├── MIGRATION.md                  2026-09-30 目录重构迁移对照表
+├── CHANGELOG.md                  变更记录
+├── CONTRIBUTING.md               贡献约定
+├── SECURITY.md                   安全与披露说明
+├── LICENSE                       授权
+├── package.json                  Node 工程入口（工具安装/测试/校验/文档）
+├── pnpm-workspace.yaml           pnpm 工作区声明
+├── pnpm-lock.yaml                Node 依赖锁
+├── recipes.json                  文档站/工具链配方索引
+├── .editorconfig                 编辑器统一风格
+├── .gitattributes                Git 属性
+├── .gitignore                    忽略规则（工具链、大二进制、隔离区）
+├── .npmrc                        npm 源与引擎策略
+├── .zcodeignore                  检索排除规则
+├── 启动本地取签服务.bat          一键常驻本地取签/解密服务（Apipost 点发送前先跑它）
+│
+├── .github/                      CI 配置
+│   ├── ISSUE_TEMPLATE/
+│   └── workflows/
+│
+├── src/                          【源码层】可复用库
+│   ├── README.md
+│   ├── pyproject.toml            jcy-protocol 打包声明
+│   └── jcy_protocol/             ★ auth.py 为 authentication 算法纯逻辑实现
+│
+├── tests/                        【测试层】
+│   ├── README.md
+│   ├── test_channels.py          三通道向量回归
+│   ├── test_auth_pure.py         authentication 纯逻辑单元测试（无需模拟器）
+│   ├── test_authgen.py           authentication 端到端回归（5 项断言）
+│   └── fixtures/                 固化测试向量
+│
+├── docs/                         【文档层】docsify 文档站（结论的唯一权威出口）
+│   ├── README.md
+│   ├── _sidebar.md
+│   ├── index.html
+│   ├── installation.md           环境安装
+│   ├── structure.md              目录职责与数据流
+│   ├── architecture.md           系统架构与模块职责
+│   ├── algorithm-auth.md         ★ authentication 算法原理与用法
+│   ├── reverse-journal-auth.md   ★ authentication 逆向全记录（思路与推理）
+│   ├── scripts-index.md          脚本索引
+│   ├── tags.md                   标签与版本
+│   ├── git-push-prompt.md        推送流程提示词
+│   ├── analysis/                 分析过程（evidence / journey / open-questions / toolchain）
+│   ├── api/                      接口层结论（overview / endpoints / video-list / video-play / device-base / apipost-library / apipost-testing）
+│   ├── assets/                   文档站静态资源
+│   ├── crypto/                   加密层结论（overview / http-body / monitor-channel / signaling-channel / x-token）
+│   ├── prompts/                  提示词模板
+│   └── setup/                    环境搭建（ldplayer-magisk-env / re-modules）
+│
+├── config/                       【配置层】
+│   ├── tools.json                第三方工具清单与安装集
+│   ├── requirements.txt          Python 运行依赖
+│   └── requirements-analysis.txt Python 分析依赖
+│
+├── scripts/                      【脚本层】工程自动化
+│   ├── bootstrap.mjs             工具链安装/状态
+│   ├── python-setup.mjs          Python 环境构建
+│   ├── run-tests.mjs             测试入口
+│   ├── validate-structure.mjs    结构 ↔ 文档一致性校验
+│   ├── lib/
+│   └── re-env/                   动态环境拉起与验收
+│
+├── assets/                       【资源层】
+│   ├── README.md
+│   └── apk/                      原始样本 base.apk（只读基线）
+│
+├── research/                     【研究层】分析过程与产物
+│   ├── README.md
+│   ├── artifacts/                必需二进制产物（libcore.so、设备内存镜像、区域 dump）
+│   ├── toolchain/                分析脚本（Unicorn 模拟器、探针、反汇编工具）
+│   ├── deliverables/             ★ 对外交付（authgen、三通道解密、验证脚本）
+│   ├── captures/                 真实抓包（proxy_capture / proxy_bodies）
+│   ├── corpus/                   语料（O_corpus / O_true_corpus）
+│   ├── reports/                  阶段报告（VERIFICATION.txt、API_MATRIX_V5 等）
+│   └── archive/                  历史版本与早期脚本归档（v5–v12、legacy-*）
+│
+├── reflutter_work/               reFlutter 工作区（Dart dump 等大文件不入库）
+└── tools/                        第三方工具链（apktool / jadx / blutter / frida；不入库）
+```
+
+---
 
 ## 成果速览
 
 | 目标 | 状态 | 位置 |
 |---|---|---|
-| 视频播放接口全链路分析 | ✅ 端点/参数/头/链路全部还原 | `docs/api/`、`out/API_ANALYSIS.md` |
-| 登录逻辑（设备静默登录） | ✅ device-base + X-Token 机制 | `docs/api/device-base.md`、`docs/crypto/x-token.md` |
-| API 加解密逆向 | ✅ 监控/信令双通道 100%；HTTP 结构 100% | `docs/crypto/` |
-| 离线客户端库 | ✅ Python 客户端已验证加密层 | `out/client/gg_client.py` |
-| Dart 结构还原 | ✅ blutter 产物（对象池/asm/frida 模板） | `out/blutter_out/` |
-| 离线验证页 | ✅ hls.js 播放验证 | `out/demo/index.html` |
+| `authentication` 头算法 | **完全破解**，服务端实测通过 | [`research/deliverables/authgen.py`](research/deliverables/authgen.py) |
+| 监控通道解密（AES-128-CBC） | 已破解 | `research/deliverables/decrypt_v5/chan1_monitor.py` |
+| 信令通道解密（AES-128-CBC） | 已破解 | `research/deliverables/decrypt_v5/chan2_signaling.py` |
+| HTTP body 结构（双向 RSA-2048 + AES） | 结构已定论 | `research/deliverables/decrypt_v5/chan3_http.py` |
+| 视频播放接口全链路 | 端点/参数/头/链路全部还原 | [`docs/api/`](docs/api/overview.md) |
+| 登录逻辑（设备静默登录） | device-base + X-Token 机制 | [`docs/api/device-base.md`](docs/api/device-base.md)、[`docs/crypto/x-token.md`](docs/crypto/x-token.md) |
+| 播放直链提取 | 已打通（含 MP4 直链实测） | `research/deliverables/decrypt_v5/run_play.py` |
+| 离线客户端库 | 加密层已验证 | `research/deliverables/client/gg_client.py` |
+| Dart 结构还原 | blutter 产物（对象池/asm/frida 模板） | `research/artifacts/blutter_research/` |
+| 离线验证页 | hls.js 播放验证 | `research/deliverables/demo/index.html` |
 
-## 仓库目录结构
+---
 
-```
-.
-├── README.md              本文件（项目入口）
-├── LICENSE                使用许可（仅供研究使用）
-├── CHANGELOG.md           变更日志
-├── CONTRIBUTING.md        贡献指南（提交规范与自查清单）
-├── SECURITY.md            安全说明（可提交/不可提交内容）
-├── package.json           pnpm 脚本与依赖入口（postinstall 自动装工具）
-├── pnpm-workspace.yaml    workspace 定义
-├── pnpm-lock.yaml         依赖锁文件（可复现安装）
-├── .npmrc                 pnpm 配置
-├── .gitignore             版本控制排除规则（工具/二进制/解包产物不入库）
-├── .gitattributes         行尾与文本属性统一
-├── .editorconfig          编辑器风格统一
-├── .github/               CI 工作流与 Issue/PR 模板
-│   ├── workflows/         骨架一致性校验工作流（validate.yml）
-│   └── ISSUE_TEMPLATE/    Bug 报告模板
-├── config/
-│   └── tools.json         逆向工具安装清单（core / all 两个工具集）
-├── scripts/
-│   ├── bootstrap.mjs      工具下载与安装（GitHub Release / 归档 / git clone）
-│   ├── python-setup.mjs   创建 .venv 并安装 Python 依赖（--analysis 装分析依赖）
-│   ├── run-tests.mjs      运行协议层测试
-│   ├── validate-structure.mjs  README 目录树 ↔ 文件系统双向校验 + 内链校验
-│   ├── lib/
-│   │   └── python-env.mjs Python 解释器发现（脚本间共用）
-│   └── re-env/            雷电14 动态环境一键拉起与验收
-│       ├── start_re_env.bat  拉起模拟器并触发环境自检
-│       └── verify_env.py     环境就绪度验收（Magisk/LSPosed/frida）
-├── python/
-│   ├── requirements.txt   基础依赖（requests / pycryptodome）
-│   └── requirements-analysis.txt  分析依赖（frida / Pillow / numpy）
-├── packages/              可复用模块（从分析脚本抽取）
-│   └── protocol/          jcy_protocol：双通道加解密原语 + 已验证测试
-│       ├── jcy_protocol/  库源码（channels / vectors / __init__）
-│       └── tests/         单元测试（10 项，含真实密文向量）
-├── apk/                   原始样本 base.apk（仅本地保存，不入库）
-├── docs/                  逆向文档站（docsify，阅读入口 docs/index.html）
-│   ├── analysis/          解密过程全记录（时间线/工具链/证据/遗留问题）
-│   ├── api/               接口文档（总览/视频列表/播放/设备登录/端点速查）
-│   ├── crypto/            加密算法（三通道架构/监控/信令/HTTP body/X-Token）
-│   ├── setup/             动态运行环境搭建（雷电14 + Magisk + LSPosed + frida）
-│   ├── installation.md    环境安装与复现
-│   ├── structure.md       项目结构、分层与扩展点
-│   ├── scripts-index.md   out/ 下 104 个分析脚本的按族索引
-│   ├── tags.md            版本标签与仓库 Topics 说明
-│   ├── git-push-prompt.md 仓库推送流程提示词
-│   └── assets/            静态资源
-├── out/                   分析工作区（入库：脚本/客户端/文档产物）
-│   ├── client/            Python 客户端 gg_client.py + Frida 脚本族（成果）
-│   ├── demo/              离线验证页 index.html（hls.js）
-│   ├── blutter_out/       blutter 产物（pp.txt 对象池 / objs.txt / frida 模板）
-│   └── *.py / *.js / *.c  分析与 hook 脚本（104 个，含迭代过程）
-├── reflutter_work/        reflutter 工作区（dump.dart 等，仅本地保存）
-└── tools/                 逆向工具链（由 pnpm 安装，不入库，见 tools/README.md）
-```
-
-> 标注"仅本地保存"的目录因体积/版权原因不入库；`tools/` 由 `pnpm install` 自动恢复，见 `tools/README.md`。
-> 运行 `pnpm validate` 可校验上述骨架与文档是否一致。
-
-## 快速上手
-
-```python
-import sys; sys.path.insert(0, 'out/client')
-from gg_client import SIG_KEY, SIG_IV, channel_decrypt
-
-# 解一条真实信令响应
-print(channel_decrypt(
-    "VuVH8nti+EBD+8IsQy5T0VSfsJhWfysCQf+hyZ2ssjnfhfVK8BHxy4JnZgs5oU9L"
-    "3MKaF8hUWpsiJ19C+DOZrwc8DiKYVehRQBgJpdSP5zY=", SIG_KEY, SIG_IV))
-# b'{"action":"get_app_info","code":200,"payload":{"address":"723da3db40"}}'
-```
-
-## 密钥速查
-
-| 通道 | 算法 | key | iv |
-|---|---|---|---|
-| 监控 (libcore C2) | AES-128-CBC PKCS7 | `qPwClBj7j7ZQraSm` | `p3JdVQl3q7WQJIgG` |
-| 信令 (libloader IPC) | AES-128-CBC PKCS7 | `kFGTbLlOzFHQCIKp` | `F3q22XoM8l6T2Ydc` |
-| HTTP body | 随机会话 key AES-CBC + RSA-2048 包裹 | 每请求随机 | 每请求随机 |
-
-## 一键环境安装（pnpm）
-
-项目已整理为可复现的 pnpm 骨架。首次克隆后，在根目录执行：
+## 快速开始
 
 ```bash
-pnpm install
-```
+# 1) 环境（Node 22+ / pnpm 9+）
+pnpm install                  # 依赖 + core 工具 + Python .venv
+pnpm tools:status             # 查看工具链状态
+pnpm validate                 # 校验目录结构 ↔ 文档一致
 
-这会安装 Node 依赖、core 逆向工具（apktool / uber-apk-signer / jadx / platform-tools），并创建 `.venv` 安装 `requests` 与 `pycryptodome`。完整工具集（blutter / PCAPdroid / Frida Gadget）按需执行：
+# 2) 测试
+pnpm test                                      # 协议向量 + authgen 回归
+./.venv/Scripts/python.exe tests/test_authgen.py
 
-```bash
-pnpm tools:install:all
-pnpm tools:status
-pnpm validate
-```
+# 3) 生成 authentication 头（离线，无需真机/网络）
+./.venv/Scripts/python.exe research/deliverables/authgen.py --selftest
+./.venv/Scripts/python.exe research/deliverables/authgen.py                 # 当前时间
+./.venv/Scripts/python.exe research/deliverables/authgen.py --test-server   # 顺带打真实服务器
 
-详细的下载源、代理设置、Python 环境与目录落点见 [`docs/installation.md`](docs/installation.md)；工具清单见 [`config/tools.json`](config/tools.json)。
-
-## 文档导航（docsify 本地阅读）
-
-```bash
+# 4) 文档站
 pnpm docs:serve
-# 浏览器打开 http://localhost:3000
 ```
 
-- 加密算法：三通道架构 / 监控通道 / 信令通道 / HTTP body / X-Token → `docs/crypto/`
-- 接口文档：总览与请求头 / 视频列表 / 播放链接 / 设备登录 / 端点速查 → `docs/api/`
-- 解密全记录：破解放事 / 工具链手册 / 证据索引 / 遗留问题 → `docs/analysis/`
+---
 
-## 版本标签
+## 约定
 
-- `v0.1.0` — 首个完整分析版本（接口全链路 + 双通道加密还原 + 客户端库），标签说明见 `docs/tags.md`
-
-## 免责声明
-
-本项目仅为个人学习与研究用途的逆向分析记录，不提供任何 App 安装包的分发，不用于任何商业或非法用途。样本与接口数据仅用于验证分析结论。
+- **文档优先**：结论先写进 `docs/`，脚本再从结论实现。
+- **路径统一**：研究区脚本一律通过 `research/toolchain/paths.py` 取路径，禁止硬编码相对路径。
+- **证据可复现**：每个结论都指向 `research/reports/` 或 `research/captures/` 中的真实数据。
+- **大文件不入库**：工具链、内存镜像、区域 dump 由 `pnpm tools:install` 或
+  [`research/README.md`](research/README.md) 中的重建步骤恢复。

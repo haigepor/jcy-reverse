@@ -1,8 +1,10 @@
 - [首页](/)
 - **运行环境**
   - [雷电14 + Magisk 环境搭建](setup/ldplayer-magisk-env.md)
+  - [逆向分析模块清单](setup/re-modules.md)
 - **加密算法**
   - [总览：三通道架构](crypto/overview.md)
+  - [★ authentication 头算法（已破解）](algorithm-auth.md)
   - [监控通道 (libcore/qPwC)](crypto/monitor-channel.md)
   - [信令通道 (libloader/kFGT)](crypto/signaling-channel.md)
   - [HTTP body (apiEncrypt/P0.P1)](crypto/http-body.md)
@@ -13,14 +15,22 @@
   - [播放链接 /app/video/play](api/video-play.md)
   - [设备登录 /app/video/device-base](api/device-base.md)
   - [其余端点速查](api/endpoints.md)
+  - [★ 35 接口端到端实测矩阵](api/live-matrix.md)
+  - [★ Apipost 接口库分析](api/apipost-library.md)
+  - [★ 在 Apipost 里手动调试接口](api/apipost-testing.md)
 - **项目工程化**
   - [环境安装与复现](installation.md)
   - [项目结构说明](structure.md)
+  - [系统架构与模块职责](architecture.md)
   - [分析脚本索引](scripts-index.md)
   - [版本标签说明](tags.md)
   - [推送流程提示词](git-push-prompt.md)
 - **解密过程全记录**
+  - [★ 端到端加解密全链路（完整分析）](analysis/e2e-decrypt.md)
   - [破解放事 (完整时间线)](analysis/journey.md)
+  - [★ authentication 逆向全记录 (思路与推理)](reverse-journal-auth.md)
   - [工具链构建 (blutter/frida)](analysis/toolchain.md)
   - [证据索引](analysis/evidence.md)
   - [遗留问题与实验设计](analysis/open-questions.md)
+- **可执行提示词**
+  - [完整逆向 V5 执行提示词](prompts/full-reverse.md)

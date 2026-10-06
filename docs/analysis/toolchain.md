@@ -86,7 +86,7 @@ offset 为相对 isolate instructions 起点；运行时地址 = base + 0x4b6b40
 → uber-apk-signer 重签 → 安装
 ```
 
-脚本: `out/build_gadget_surgery.py`。
+脚本: `research/build_gadget_surgery.py`。
 
 ### 2.2 连接
 

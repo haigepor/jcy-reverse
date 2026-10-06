@@ -65,5 +65,5 @@ P1 长度样本 24/88/96/432/656/876 (均 %16∈{8,12})。可能:
 
 ## 6. 去广告版维护
 
-out/base_adfree_final-aligned-debugSigned.apk 已交付 (15 方法 smali 补丁)。
+research/base_adfree_final-aligned-debugSigned.apk 已交付 (15 方法 smali 补丁)。
 若 app 升级, 重打流程: ROLLBACK.ps1 恢复基线 → apply_adfree_patch.py。

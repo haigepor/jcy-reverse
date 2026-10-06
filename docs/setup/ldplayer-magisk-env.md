@@ -343,7 +343,7 @@ backtrace:
 | 影响 | 动态 hook 会在 `DartWorker` 线程被 libhoudini 带崩，无法稳定跑完整流程 |
 
 **后续动态分析建议**：改用 arm64 原生环境（真机 / arm64 系统镜像模拟器 / MuMu 等带原生 ARM 支持的方案）。
-静态侧（blutter / reFlutter / 已有的 `out/blutter_out`）不受此影响。
+静态侧（blutter / reFlutter / 已有的 `research/artifacts/blutter_out`）不受此影响。
 
 ---
 

@@ -4,7 +4,7 @@
 
 - Node.js 22+
 - pnpm 9.15+
-- Python 3.10+（运行 `out/client/gg_client.py` 时需要）
+- Python 3.10+（运行 `research/deliverables/client/gg_client.py` 时需要）
 - Android 设备动态分析阶段需要启用 USB 调试；`adb` 由 `platform-tools` 提供
 
 ## 一键安装
@@ -69,11 +69,11 @@ pnpm tools:status              # 查看 core/all 工具是否存在
 
 ## 可选：安装协议库
 
-`packages/protocol` 可从本地以可编辑模式安装，便于在新脚本中直接 `import jcy_protocol`：
+`src/protocol` 可从本地以可编辑模式安装，便于在新脚本中直接 `import jcy_protocol`：
 
 ```bash
-.venv/Scripts/python.exe -m pip install -e packages/protocol   # Windows
-.venv/bin/python -m pip install -e packages/protocol            # macOS / Linux
+.venv/Scripts/python.exe -m pip install -e src/protocol   # Windows
+.venv/bin/python -m pip install -e src/protocol            # macOS / Linux
 ```
 
 ## 目录与工具落点
@@ -99,6 +99,6 @@ Windows PowerShell 中最后一条使用 `.venv\Scripts\python.exe`；Git Bash �
 
 ### 依赖分层的说明
 
-`out/*.py` 分析脚本实际用到 `frida`（51 处引用）、`PIL`（8 处）、`numpy`（1 处），
+`research/*.py` 分析脚本实际用到 `frida`（51 处引用）、`PIL`（8 处）、`numpy`（1 处），
 这些**不在**默认 `pnpm install` 中安装，因为 frida 版本必须与设备端 frida-server 严格一致
 （本项目为 17.8.2）。需要做动态分析时再执行 `pnpm python:install:analysis`。
