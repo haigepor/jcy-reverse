@@ -30,6 +30,9 @@ research/*
 !research/README.md
 !research/*.py
 !research/deliverables/
+# 补丁后的 APK（43 MB）+ idsig + debug keystore：纯构建产物，
+# 可用 tools/apktool.jar + uber-apk-signer.jar 从 assets/apk/base.apk 重建，不入库。
+research/deliverables/apk_patch/
 !research/corpus/
 !research/toolchain/
 !research/captures/

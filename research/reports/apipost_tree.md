@@ -1,0 +1,81 @@
+# Apipost「囧次元」接口库目录树
+
+- project_id: `6ef0f75d8470000`
+- 节点总数: 41
+
+- **[目录] 弹幕与评论**  `6ef0f775f072000`
+  - `GET` 弹幕拉取  `6ef0f83b0c70000`
+    - http://43.145.33.254:27990/app/danmu
+  - `GET` 热评命中  `6ef0f84ddc72000`
+    - http://43.145.33.254:27990/app/vod_comment/gethitstop
+  - `GET` 热评置顶  `6ef0f8444472000`
+    - http://43.145.33.254:27990/app/vod_comment/gettop
+  - `GET` 评论列表  `6ef0f8571c70000`
+    - http://43.145.33.254:27990/app/vod_comment/getlist
+- **[目录] 消息**  `6ef0f7884072000`
+  - `POST` 动态消息  `6ef0f89a6c72000`
+    - http://43.145.33.254:27990/app/messagebox/dynamic
+  - `POST` 收件箱  `6ef0f8908072000`
+    - http://43.145.33.254:27990/app/messagebox/give_me
+- **[目录] 特殊端点与登录门槛**  `6ef0f7918072000`
+  - `GET` Host 配置(v2 方案)  `6ef0f8acb070000`
+    - http://43.145.33.254:27990/app/v2/config/host
+  - `GET` VIP 价格(登录后)  `6ef0f8bf8070000`
+    - http://43.145.33.254:27990/app/vip_price/list
+  - `POST` 任务列表(登录后)  `6ef0f8c86070000`
+    - http://43.145.33.254:27990/app/task/task
+  - `POST` 升级检查(特例)  `6ef0f8a39472000`
+    - http://43.145.33.254:27990/app/upgrade
+  - `GET` 播放地址v4(登录后)  `6ef0f8d19870000`
+    - http://43.145.33.254:27990/app/playaddr/v4/client
+  - `GET` 用户信息(登录后)  `6ef0f8b63872000`
+    - http://43.145.33.254:27990/app/users/info
+  - `POST` 短信验证码(登录)  `6ef0f8dab470000`
+    - http://43.145.33.254:27990/app/login/smscode
+- **[目录] 用户与任务**  `6ef0f77f0472000`
+  - `POST` 本地缓存上报  `6ef0f87da870000`
+    - http://43.145.33.254:27990/app/history/localcahce
+  - `POST` 清图上报  `6ef0f8606470000`
+    - http://43.145.33.254:27990/app/users/clearimg
+  - `POST` 用户任务  `6ef0f86a5870000`
+    - http://43.145.33.254:27990/app/users/task
+  - `GET` 签到规则  `6ef0f8873072000`
+    - http://43.145.33.254:27990/app/task/sign_rule
+  - `POST` 观看历史  `6ef0f8745072000`
+    - http://43.145.33.254:27990/app/history
+- **[目录] 视频与播放**  `6ef0f76ca470000`
+  - `GET` 搜索  `6ef0f7fa1c70000`
+    - http://43.145.33.254:27990/app/video/search
+  - `GET` 搜索联想  `6ef0f8037c70000`
+    - http://43.145.33.254:27990/app/video/key
+  - `POST` 播放凭证  `6ef0f831e070000`
+    - http://43.145.33.254:27990/app/video/play
+  - `POST` 播放记录上报  `6ef0f81f4872000`
+    - http://43.145.33.254:27990/app/video/record
+  - `POST` 播放连接  `6ef0f828a472000`
+    - http://43.145.33.254:27990/app/video/play-connect
+  - `GET` 更新排期表  `6ef0f80d0872000`
+    - http://43.145.33.254:27990/app/video_update_list/2026-09-29
+  - `GET` 视频列表  `6ef0f7e6b072000`
+    - http://43.145.33.254:27990/app/video/list
+  - `GET` 视频详情  `6ef0f7f07c70000`
+    - http://43.145.33.254:27990/app/video/detail
+  - `POST` 设备信息上报  `6ef0f815e872000`
+    - http://43.145.33.254:27990/app/video/device-base
+- **[目录] 频道与配置**  `6ef0f7636c72000`
+  - `GET` Banner(频道0/首页)  `6ef0f7ca5870000`
+    - http://43.145.33.254:27990/app/banners/0
+  - `GET` Banner(频道1)  `6ef0f7d3f872000`
+    - http://43.145.33.254:27990/app/banners/1
+  - `GET` Banner(频道2)  `6ef0f7dd3870000`
+    - http://43.145.33.254:27990/app/banners/2
+  - `GET` 全局配置  `6ef0f7ad4072000`
+    - http://43.145.33.254:27990/app/config
+  - `POST` 视频页配置  `6ef0f7c05c70000`
+    - http://43.145.33.254:27990/app/config/video
+  - `GET` 频道列表  `6ef0f79ac072000`
+    - http://43.145.33.254:27990/app/channel?top-level=true
+  - `GET` 频道列表(301跳转源)  `6ef0f7a3c472000`
+    - http://43.145.33.254:27990/app/channel/
+  - `POST` 频道配置  `6ef0f7b6c070000`
+    - http://43.145.33.254:27990/app/config/channel
