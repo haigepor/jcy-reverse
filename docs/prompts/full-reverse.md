@@ -109,7 +109,7 @@ cat research/reports/handoff/HANDOFF_PROMPT_V4.md
 | 审计链 | `research/reports/VERIFICATION.txt` | `[F1]`~`[F10]` 证据链 |
 | 离线客户端 | `research/deliverables/client/gg_client.py` | 监控/信令双通道解密，**已验证** |
 | frida 脚本族 | `research/deliverables/client/gg_*.js` | 纯 native hook 脚本（真机七轮） |
-| blutter 产物 | `research/artifacts/blutter_research/` | `pp.txt` 对象池 2.6MB、`objs.txt`、`asm/`、IDA 脚本、frida 模板 |
+| blutter 产物 | `research/artifacts/blutter_out/` | `pp.txt` 对象池 2.6MB、`objs.txt`、`asm/`、IDA 脚本、frida 模板 |
 | reFlutter 产物 | `reflutter_work/` | `dump.dart`、组合包 APK |
 | 抓包数据 | `research/ggcap.pcap`、`research/auth_samples.json`(88条)、`research/auth_full_rows.json`(28条)、`research/resp_bodies.tsv` | |
 | native 库 | `research/nativelibs/libcore.so`、`libapp.so` | |

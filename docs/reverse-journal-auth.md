@@ -389,7 +389,7 @@ ct3 (body[48: 64]) 不一致 ← 覆盖明文 A1[48:64] = input[36:48]
 
 ## 阶段 14 · 脚本工程化
 
-- 把纯逻辑抽到 `src/jcy_protocol/auth.py`（零大文件依赖），
+- 把纯逻辑抽到 `src/tools/jcy_protocol/auth.py`（零大文件依赖），
   以 `EBackend` 协议注入 `E`；
 - `research/deliverables/authgen.py` 只负责提供 Unicorn 后端与 CLI；
 - 新增 `tests/test_auth_pure.py`（纯逻辑，无需模拟器）与

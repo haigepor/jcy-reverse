@@ -11,6 +11,8 @@
 ┌───────────────────────────────────────────────────────────────┐
 │  docs/            结论层：分析结论、算法说明、接口文档          │  ← 人读，权威出口
 ├───────────────────────────────────────────────────────────────┤
+│  src/web/         应用层：Web 前端（jcy-web，经后端桥消费）     │  ← 浏览器先行，预留 Tauri v2
+├───────────────────────────────────────────────────────────────┤
 │  src/             源码层：可复用库 jcy_protocol                │  ← 稳定接口，可安装
 │  tests/           测试层：向量回归 + 算法回归                  │
 ├───────────────────────────────────────────────────────────────┤
@@ -25,14 +27,15 @@
 └───────────────────────────────────────────────────────────────┘
 ```
 
-**依赖方向是单向的**：`docs` ← `src/tests` ← `research` ← `scripts/config/assets`。
-`research/` 允许依赖 `src/`，但 `src/` **不得**依赖 `research/`。
+**依赖方向是单向的**：`docs` ← `src/web` ← `src/tests` ← `research` ← `scripts/config/assets`。
+`research/` 允许依赖 `src/`，但 `src/` **不得**依赖 `research/`；
+`src/web/` 只经 HTTP 调后端桥（`src/web/server/`），不得直接 import Python 层。
 
 ---
 
 ## 二、模块职责
 
-### 2.1 `src/` — 可复用库
+### 2.1 `src/tools/jcy_protocol/` — 可复用协议库
 
 | 模块 | 职责 |
 |---|---|
@@ -48,16 +51,25 @@
 > 与 `research/deliverables/client/gg_client.py` 的关系：后者是**冻结的取证产物**，
 > 新代码从 `jcy_protocol` 引用，同一能力不重复实现。
 
-### 2.2 `tests/` — 测试层
+### 2.2 `src/web/` — Web 前端（jcy-web）
+
+| 项 | 说明 |
+|---|---|
+| 技术栈 | Vite 7 + React 19 + TypeScript 5.9 + Tailwind 4 + shadcn/ui（61 组件）+ ArtPlayer + hls.js |
+| 职责 | 频道 / 列表 / 详情 / 播放的浏览器端 UI；预留 Tauri v2 桌面打包 |
+| 边界 | **不实现协议**：`/api`、`/stream` 反代到后端桥 `server/main.py`（FastAPI :8792，封装 `jcy_api.py`） |
+| 状态 | 前端脚手架 + 后端桥就绪（`/api` 透传、`/resolve` 播放解析、`/stream` 流代理）；`src/main.tsx` 应用入口与路由待落码 |
+
+### 2.3 `tests/` — 测试层
 
 | 文件 | 覆盖 | 依赖 |
 |---|---|---|
-| `test_channels.py` | 两条 AES 通道的加解密向量回归 | `pycryptodome`、`src/jcy_protocol` |
+| `test_channels.py` | 两条 AES 通道的加解密向量回归 | `pycryptodome`、`src/tools/jcy_protocol` |
 | `test_auth_pure.py` | `authentication` 算法**纯逻辑**单元测试（字母表往返、输入串、body 结构、主流程） | 无（可随时运行） |
 | `test_authgen.py` | `authentication` 端到端回归（5 项断言） | `unicorn`、`research/artifacts/`；缺失时 SKIP=77 |
 | `fixtures/authgen_vector.json` | 固化的真机向量 | — |
 
-### 2.3 `research/toolchain/` — 分析工具
+### 2.4 `research/toolchain/` — 分析工具
 
 | 模块 | 职责 |
 |---|---|
@@ -73,7 +85,7 @@
 | `brute_E.py` | E 的算法爆破（AES/SM4 全参数空间） |
 | `dump_all.py` / `run_dump.py` | 设备内存区域批量 dump |
 
-### 2.4 `research/deliverables/` — 对外交付
+### 2.5 `research/deliverables/` — 对外交付
 
 | 文件 | 职责 |
 |---|---|
@@ -91,11 +103,11 @@
 ## 三、数据流
 
 ```
-assets/assets/assets/apk/base.apk
+assets/apk/base.apk
    │
    ├─ apktool ─────▶ smali（重建步骤见 research/README.md）
    ├─ jadx ────────▶ Java 源码
-   └─ blutter ─────▶ research/artifacts/blutter_research/   Dart 对象池 / asm / frida 模板
+   └─ blutter ─────▶ research/artifacts/blutter_out/   Dart 对象池 / asm / frida 模板
 
 设备（arm64 + Houdini）
    │
@@ -110,8 +122,14 @@ research/toolchain/（Unicorn 模拟器 + 探针）
    └─▶ docs/algorithm-auth.md               结论
    │
    ▼
-src/jcy_protocol/   稳定实现
+src/tools/jcy_protocol/   稳定实现
 tests/              回归保障
+   │
+   ▼
+research/deliverables/jcy_api.py   App 级客户端（签名 / 加密 / 解密全自动）
+   │  HTTP（/api、/stream，后端桥 src/web/server/ :8792）
+   ▼
+src/web/            Web 前端
 ```
 
 ---

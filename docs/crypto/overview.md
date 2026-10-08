@@ -56,7 +56,7 @@
 
 ## 密钥常量在二进制中的位置
 
-blutter 对象池 (research/artifacts/blutter_research/pp.txt)：
+blutter 对象池 (research/artifacts/blutter_out/pp.txt)：
 
 ```
 [pp+0x7000] String: "kFGTbLlOzFHQCIKp"     ← 信令 key

@@ -11,5 +11,5 @@
 ## 用途
 
 - `research/base_*` 系列解包目录均由本文件生成（apktool）
-- `research/artifacts/blutter_research/` 由 `libapp.so`（本 apk 内）经 blutter 生成
+- `research/artifacts/blutter_out/` 由 `libapp.so`（本 apk 内）经 blutter 生成
 - 所有抓包、hook、动态调试均基于本样本安装的设备环境

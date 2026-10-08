@@ -13,6 +13,6 @@
 
 ## 与其他目录的关系
 
-- `dump.dart` 经解析后支撑了 `research/artifacts/blutter_research/pp.txt` 的交叉验证
+- `dump.dart` 经解析后支撑了 `research/artifacts/blutter_out/pp.txt` 的交叉验证
 - `combo.RE-gadget.apk`（已删除，可重建）= ReFlutter + Frida Gadget 组合包，配合 `tools/libgadget.so` 使用
 - 重打包签名统一使用 `tools/uber-apk-signer.jar`

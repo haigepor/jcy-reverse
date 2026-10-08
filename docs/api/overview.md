@@ -138,3 +138,18 @@ S = "3.0.0.8-{ts}-Android-1.5.8.0-{device_fp}-default"
 | `auth` 绑定路径 / query | ❌ **不绑定**；同一 auth 可跨 22 个端点 |
 | `/app/config/channel`、`/app/config/video` 是 GET | ❌ 实际为 **POST** |
 | `/app/users/task`、`/app/messagebox/*`、`/app/history*` 未标方法 | 实际为 **POST**（用 GET 得 404） |
+
+## App 启动失败「获取服务器地址失败！」分析（2026-10-07）
+
+原 App（1.5.8.0）在模拟器启动后卡在「获取服务器地址失败！刷新」占位页。静态链路 + 实测结论：
+
+| 环节 | 状态 | 证据 |
+|---|---|---|
+| 主 API `43.145.33.254:27990` | ✅ 存活 | 桥接实时 `/app/config` code=20000（2026-10-07） |
+| 域名入口 `pzl.clicli.blog:8087` | ⚠ 存活但路由全变 | 404 "Route not found"（`/api/league/domain/heartbeat`、`/api/league/auth/getAuthorization` 等全部命中 404；这些路径提取自 libapp.so Dart 快照） |
+| 信令/分享域 `ws://pzl.clicli.blog:8088` | ❌ 死亡 | TCP connection refused |
+| host 配置来源 | 原生层 | `FFIUtils.getHostConfig`（libcore/qPwC 回调端，见 crypto/signaling-channel.md）；9 月真机抓包显示 App 启动期直连 27990（POST /app/upgrade 等 539 条） |
+
+**结论**：字符串「获取服务器地址失败！」位于 `libapp.so`（Dart 快照 UTF-16，偏移 0x6b33e）。App 引导期先经入口域获取/校验服务器地址（8087 路由已变更 + 8088 已死），原生层 host 配置链路随之失败；主 API 本身健康——这就是 Web 桥（直连 27990 + 离线 auth）能正常工作而原 App 打不开的原因。修复方向：新版 App 抓包对照新路由，或给模拟器 App 做 host 补丁（越域转发到 27990）。
+
+**模拟器侧障碍（2026-10-07）**：宿主 Windows 已启用 VBS/内存完整性（`HypervisorPresent=True`、`VirtualizationBasedSecurityStatus=2`），LDPlayer 的 Ld9Box（VirtualBox 系）退化为慢速 NEM 模式——guest 时钟每 72s 冻结 60s、45 分钟无法完成引导、ADB 无法连接。恢复方法：Windows 安全中心 → 设备安全 → 内核隔离 → 关闭「内存完整性」（或 `bcdedit /set hypervisorlaunchtype off`）后**重启 Windows**，再启动模拟器即可正常 ADB（5555）。

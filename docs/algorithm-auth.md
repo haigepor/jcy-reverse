@@ -242,7 +242,7 @@ status, reason, data = AG.probe_server(ts, auth, nonce="12345678", path="/app/co
 
 | 层 | 文件 | 职责 |
 |---|---|---|
-| 纯逻辑 | [`src/jcy_protocol/auth.py`](../src/jcy_protocol/auth.py) | 字母表编解码、输入串构造、body 拆分、头拼装；定义 `EBackend` 协议。**零大文件依赖** |
+| 纯逻辑 | [`src/tools/jcy_protocol/auth.py`](../src/tools/jcy_protocol/auth.py) | 字母表编解码、输入串构造、body 拆分、头拼装；定义 `EBackend` 协议。**零大文件依赖** |
 | 后端 + CLI | [`research/deliverables/authgen.py`](../research/deliverables/authgen.py) | 以 Unicorn 执行 libcore.so 实现 `E`，提供命令行 |
 | 测试 | `tests/test_auth_pure.py`（纯逻辑）、`tests/test_authgen.py`（端到端） | 回归保障 |
 

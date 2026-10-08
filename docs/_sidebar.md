@@ -21,6 +21,9 @@
 - **项目工程化**
   - [环境安装与复现](installation.md)
   - [项目结构说明](structure.md)
+  - [★ 安卓客户端（Capacitor + JNI → libcore.so）](app-client.md)
+  - [★ Web 前端架构与播放器](frontend.md)
+  - [★ 结构深度分析与规范对照](structure-review.md)
   - [系统架构与模块职责](architecture.md)
   - [分析脚本索引](scripts-index.md)
   - [版本标签说明](tags.md)

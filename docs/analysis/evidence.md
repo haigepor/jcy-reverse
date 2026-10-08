@@ -7,7 +7,7 @@
 | 结论 | 证据位置 |
 |---|---|
 | 监控 key `qPwClBj7j7ZQraSm` | research/ffi_log.jsonl (`AES_KEY_SETUP` 事件, aes_v8_set_encrypt_key, hex 715077436c426a376a375a517261536d) |
-| 信令 key 出处 (静态) | research/artifacts/blutter_research/pp.txt `[pp+0x7000]/[pp+0x7008]` (紧邻 pp+0x7010 AESMode{cbc}) |
+| 信令 key 出处 (静态) | research/artifacts/blutter_out/pp.txt `[pp+0x7000]/[pp+0x7008]` (紧邻 pp+0x7010 AESMode{cbc}) |
 | 信令 key 验证 (动态) | research/manual_log2.jsonl `sig.call.leave` → 解密 `{"action":"get_app_info",...}` |
 | 信令响应完整密文样本 | 本文 signaling-channel.md 内嵌 96 字符 b64 |
 | 心跳诱饵 JSON | research/manual_log2.jsonl `sig.call.enter` 416B 解密 (随机 16 字符键值对) |
@@ -41,9 +41,9 @@
 
 | 产物 | 路径 |
 |---|---|
-| blutter 对象池 (2.6MB) | research/artifacts/blutter_research/pp.txt |
-| blutter 函数索引 (102 包) | research/artifacts/blutter_research/asm/ |
-| blutter frida 模板 | research/artifacts/blutter_research/blutter_frida.js |
+| blutter 对象池 (2.6MB) | research/artifacts/blutter_out/pp.txt |
+| blutter 函数索引 (102 包) | research/artifacts/blutter_out/asm/ |
+| blutter frida 模板 | research/artifacts/blutter_out/blutter_frida.js |
 | reFlutter dump (59470 符号) | reflutter_work/dump2.dart + dump2_parsed.jsonl |
 | 88 条抓包样本 | research/auth_samples.json |
 | 28 条完整头样本 | research/auth_full_rows.json |

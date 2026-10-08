@@ -9,11 +9,12 @@
 | 路径 | 职责 | 入库 |
 |---|---|---|
 | `docs/` | 逆向文档站（docsify），分析结论的**唯一权威出口**；子目录 `analysis/ api/ assets/ crypto/ prompts/ setup/` | 是 |
-| `src/` | **可复用库**（`jcy_protocol`）：协议加解密、测试向量 | 是 |
+| `src/` | **三个并列工作区**：`tools/jcy_protocol/` 协议加解密库；`web/` Web 前端工作区；`app/` 安卓客户端 | 是 |
+| `src/web/` | **Web 前端（jcy-web）**：Vite + React 19 + shadcn/ui + ArtPlayer；经后端桥消费协议能力 | 是 |
 | `tests/` | **测试**：协议向量回归、`authentication` 算法回归、固化向量 | 是 |
 | `scripts/` | **工程脚本**：工具安装、Python 环境、测试、结构校验；`re-env/` 为动态环境拉起 | 是 |
 | `config/` | **配置**：工具清单 `tools.json`、Python 依赖声明 | 是 |
-| `assets/` | **资源**：原始样本 `assets/assets/apk/base.apk`（只读基线） | 否 |
+| `assets/` | **资源**：原始样本 `assets/apk/base.apk`（只读基线） | 否 |
 | `research/` | **研究过程**：分析脚本、证据、交付、历史归档（原 `research/`） | 部分 |
 | `tools/` | 第三方逆向工具链 | 否（`pnpm` 恢复） |
 | `reflutter_work/` | reFlutter 工作区与 Dart dump | 否 |
@@ -24,6 +25,8 @@
 ┌──────────────────────────────────────────────────┐
 │ docs/         结论与文档（人读，权威出口）        │
 ├──────────────────────────────────────────────────┤
+│ src/web/      应用层：Web 前端（经后端桥用协议）  │
+├──────────────────────────────────────────────────┤
 │ src/ tests/   可复用实现 + 回归保障（代码依赖）   │
 ├──────────────────────────────────────────────────┤
 │ research/     过程与证据（迭代、一次性）          │
@@ -33,12 +36,14 @@
 ```
 
 - **依赖方向单向**：`research/` 可以依赖 `src/`；`src/` **不得**依赖 `research/`。
+  `src/web/` 走 HTTP 调后端桥（`src/web/server/`，FastAPI 封装 `jcy_api.py`），
+  **不得**直接 import Python 协议层，保证前端可独立构建（浏览器先行，预留 Tauri v2）。
 - `research/` 是**证据与过程**，允许存在 `probe_A..I` 这类迭代版本，不追求整洁；
   但**对外交付**必须收敛到 `research/deliverables/`。
 - `src/` 是**稳定接口**，必须可测试、可安装。
 - `docs/` 是**结论**，必须与代码和结构一致（由 `pnpm validate` 保证）。
 
-同一能力不要在 `research/deliverables/client/` 与 `src/jcy_protocol/` 重复实现：
+同一能力不要在 `research/deliverables/client/` 与 `src/tools/jcy_protocol/` 重复实现：
 前者保持冻结作为取证产物，新代码从 `jcy_protocol` 引用。
 
 ## 三、`research/` 内部分层
@@ -56,11 +61,11 @@
 ## 四、数据流
 
 ```
-assets/assets/assets/apk/base.apk
+assets/apk/base.apk
    │
    ├─ apktool ──────────▶ smali（重建步骤见 research/README.md）
    ├─ jadx ─────────────▶ Java 层源码
-   └─ blutter ──────────▶ research/artifacts/blutter_research/    pp.txt 对象池 / asm / frida 模板
+   └─ blutter ──────────▶ research/artifacts/blutter_out/    pp.txt 对象池 / asm / frida 模板
 
 设备（arm64 + Houdini）
    │
@@ -74,8 +79,14 @@ research/toolchain/（Unicorn 模拟器 + 探针）
    └─▶ docs/algorithm-auth.md               结论
    │
    ▼
-src/jcy_protocol/                            稳定实现
+src/tools/jcy_protocol/                            稳定实现
 tests/                                       回归保障
+   │
+   ▼
+research/deliverables/jcy_api.py             App 级客户端（签名/加密/解密全自动）
+   │  HTTP（/api、/stream）
+   ▼
+src/web/                                     Web 前端（后端桥 src/web/server/ :8792）
 ```
 
 ## 五、关键约束
@@ -95,7 +106,8 @@ tests/                                       回归保障
 | 需求 | 落点 |
 |---|---|
 | 新增分析文档 | `docs/<分类>/`，并登记 `_sidebar.md` |
-| 新增可复用能力 | `src/jcy_protocol/`，并在 `tests/` 加回归 |
+| 新增可复用能力 | `src/tools/jcy_protocol/`，并在 `tests/` 加回归 |
+| 新增 Web 页面/组件 | `src/web/src/`；通用 UI 组件走 shadcn（`components.json`），桥接口经 `/api` |
 | 新增测试 | `tests/`，向量放 `tests/fixtures/` |
 | 新增分析脚本 | `research/toolchain/`，用 `paths.py` 取路径 |
 | 新增对外交付 | `research/deliverables/`，并在其 README 登记 |
