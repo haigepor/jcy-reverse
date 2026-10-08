@@ -227,14 +227,56 @@ class JcyBridgeServer(port: Int = PORT) : NanoHTTPD("127.0.0.1", port) {
     // ---------------------------------------------------------------- 辅助
 
     private fun readJsonBody(session: IHTTPSession): JSONObject? {
-        val files = HashMap<String, String>()
-        session.parseBody(files)
-        val raw = files["postData"] ?: return null
+        val raw = readBodyUtf8(session) ?: return null
         if (raw.isBlank()) return null
         return try {
             JSONObject(raw)
         } catch (_: Throwable) {
+            Diag.line("JcyBridge", "POST body 不是合法 JSON，头 80 = ${raw.take(80)}")
             JSONObject()
+        }
+    }
+
+    /**
+     * 按**原始字节**读 POST body，强制 UTF-8 解码。
+     *
+     * ⚠ 绝不能直接用 NanoHTTPD 的 `parseBody()`：前端发的是
+     * `Content-Type: application/json`（**不带 charset**），NanoHTTPD 会按默认
+     * 字符集（非 UTF-8）解码，body 里**每一个**非 ASCII 字节都被换成 U+FFFD。
+     *
+     * 这是「视频解析链接失败」的根因（2026-10-08 取证）：前端
+     * `POST /resolve {"vid":"103558","play":"mp4","part":"第1集"}`，
+     * `第1集` 在解码后变成 3 个 U+FFFD，再经 URLEncoder 编码发往服务端就是
+     * `part=%EF%BF%BD%EF%BF%BD%EF%BF%BD1%EF%BF%BD%EF%BF%BD%EF%BF%BD`，
+     * 服务端查不到该集 → `400404 查询无果`。
+     *
+     * 对照证据（/diag 的 JcyApi 日志，同一个 vid）：
+     *   损坏：`part=%EF%BF%BD%EF%BF%BD%EF%BF%BD1%EF%BF%BD…` → code=400404
+     *   正常：`part=%E7%AC%AC1%E9%9B%86`                   → code=20000
+     * 后者是 part 由 Java 内部生成（不经 HTTP body）的情况，所以这个 bug
+     * 只在「前端显式传中文 part」时暴露 —— 默认播第 1 集一直是好的。
+     */
+    private fun readBodyUtf8(session: IHTTPSession): String? {
+        val len = session.headers["content-length"]?.trim()?.toIntOrNull()
+        if (len == null || len <= 0) {
+            // 分块传输 / 长度未知：只能退回 NanoHTTPD 自己的解码（非 ASCII 仍会损坏）
+            val files = HashMap<String, String>()
+            session.parseBody(files)
+            return files["postData"]
+        }
+        return try {
+            val buf = ByteArray(len)
+            var off = 0
+            val ins = session.inputStream
+            while (off < len) {
+                val n = ins.read(buf, off, len - off)
+                if (n < 0) break
+                off += n
+            }
+            String(buf, 0, off, Charsets.UTF_8)
+        } catch (t: Throwable) {
+            Diag.err("JcyBridge", "读取 POST body 失败（content-length=$len）", t)
+            null
         }
     }
 

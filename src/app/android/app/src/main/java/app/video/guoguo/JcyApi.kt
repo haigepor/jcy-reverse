@@ -283,6 +283,17 @@ object JcyApi {
     fun play(vid: Any, playFmt: String = "mp4", partIn: String? = null): JSONObject {
         var part = partIn
         var fmt = playFmt
+        // 编码损坏探针：part 里出现 U+FFFD，说明 POST body 被非 UTF-8 字符集解码过
+        // （根因与修复见 JcyBridgeServer.readBodyUtf8）。这里只负责让它立刻可见 ——
+        // 否则症状只是服务端一句「400404 查询无果」，极难联想到是本地编码问题。
+        if (!part.isNullOrEmpty() && part.indexOf('\uFFFD') >= 0) {
+            Diag.line(
+                "JcyApi",
+                "part 含 U+FFFD（POST body 字符集损坏）：" +
+                    part.map { if (it == '\uFFFD') '?' else it }.joinToString("") +
+                    " —— 服务端会返回 400404 查询无果",
+            )
+        }
         if (part.isNullOrEmpty()) {
             val det = videoDetail(vid).opt("data")
             val parts = when (det) {

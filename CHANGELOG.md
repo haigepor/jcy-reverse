@@ -32,6 +32,16 @@
 
 ### 修复
 
+- **POST body 中文被破坏成 U+FFFD（「视频解析链接失败」根因）**：前端发的是
+  `Content-Type: application/json`（**不带 charset**），NanoHTTPD 的 `parseBody()`
+  按默认字符集解码，body 里**每个**非 ASCII 字节都被换成 U+FFFD ——
+  `{"vid":"103558","part":"第1集"}` 的集数名变成 3 个替换字符，
+  编码后发往服务端即 `part=%EF%BF%BD%EF%BF%BD%EF%BF%BD1%EF%BF%BD…`，
+  服务端查不到该集 → `400404 查询无果`。修复：`JcyBridgeServer.readBodyUtf8()`
+  改按 Content-Length **读原始字节、强制 UTF-8 解码**，绕开 NanoHTTPD 的字符集猜码；
+  另在 `JcyApi.play()` 加 U+FFFD 探针，让同类损坏在日志里立刻可见。
+  验证：吞噬星空（id=103558）7 个集 × 2 清晰度 = 14 条直链全部 `code=20000`，
+  取流 200 OK（221 MB / 355 MB / 667 MB / 1.44 GB）
 - **启动顺序**：桥必须先于 `init` 起监听。旧顺序（load → init → 起桥）下
   `init` 阻塞使桥迟迟不监听，前端首批 `/api` 请求全部 `ECONNREFUSED`，
   React Query 重试耗尽后**界面永久停在骨架屏**且不再自愈
