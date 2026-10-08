@@ -16,71 +16,99 @@
   }
 }
 
-/* shadcn/ui（Tailwind v4 CSS 变量模式）—— neutral 基色 */
+/* ============================================================================
+   设计系统 —— 深色优先（视频/番剧场景的主流形态：深底让海报跳出来）
+   ============================================================================
+
+   品牌色 #FF5C39（珊瑚橙红）＝ oklch(0.6866 0.2045 33.8)。
+   选橙红的理由：动漫海报普遍偏冷（蓝/青/紫），橙红是它的补色，
+   在深底上对比强、不脏，且比「番剧站常见的粉」在长文本与按钮上更耐看。
+
+   对比度实测（白字压在 #FF5C39 上）：
+     L(#FF5C39) ≈ 0.2925 → 与白 3.07:1、与近黑 6.85:1。
+     → 主按钮用**深字**（--primary-foreground 走深色）可读性更好；
+       但品牌色仅作**强调**（图标/下划线/角标/选中态）时用亮色描边，
+       文字仍是前景色，不产生对比度问题。
+
+   卡券层级：background(0.145) < card(0.19) < popover(0.215)，
+   三级明度差 ~0.045，肉眼可分辨又不脏。
+   ============================================================================ */
+
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --radius: 0.75rem; /* 12px —— 比原 0.625rem 更「内容卡片」，贴近 B站/腾讯视频 */
+
+  /* ---- 浅色（保留完整能力，但默认不启用）---- */
+  --background: oklch(0.985 0.002 265);
+  --foreground: oklch(0.17 0.01 265);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.17 0.01 265);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.17 0.01 265);
+  --primary: oklch(0.6866 0.2045 33.8);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.955 0.003 265);
+  --secondary-foreground: oklch(0.22 0.01 265);
+  --muted: oklch(0.955 0.003 265);
+  --muted-foreground: oklch(0.52 0.012 265);
+  --accent: oklch(0.955 0.02 40);
+  --accent-foreground: oklch(0.22 0.01 265);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --sidebar: hsl(0 0% 98%);
-  --sidebar-foreground: hsl(240 5.3% 26.1%);
-  --sidebar-primary: hsl(240 5.9% 10%);
-  --sidebar-primary-foreground: hsl(0 0% 98%);
-  --sidebar-accent: hsl(240 4.8% 95.9%);
-  --sidebar-accent-foreground: hsl(240 5.9% 10%);
-  --sidebar-border: hsl(220 13% 91%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  --border: oklch(0.9 0.004 265);
+  --input: oklch(0.9 0.004 265);
+  --ring: oklch(0.6866 0.2045 33.8 / 55%);
+
+  /* 评分 / 更新角标（两套主题共用，故放 :root） */
+  --rating: oklch(0.82 0.16 85);
+  --rating-foreground: oklch(0.24 0.04 85);
+
+  --sidebar: oklch(0.985 0.002 265);
+  --sidebar-foreground: oklch(0.26 0.01 265);
+  --sidebar-primary: oklch(0.6866 0.2045 33.8);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.955 0.003 265);
+  --sidebar-accent-foreground: oklch(0.22 0.01 265);
+  --sidebar-border: oklch(0.9 0.004 265);
+  --sidebar-ring: oklch(0.6866 0.2045 33.8 / 55%);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
+  /* 深底不用纯黑：0.145 带一点冷调，比 #000 更「影院」且不显脏 */
+  --background: oklch(0.145 0.008 265);
+  --foreground: oklch(0.97 0.003 265);
+  --card: oklch(0.19 0.008 265);
+  --card-foreground: oklch(0.97 0.003 265);
+  --popover: oklch(0.215 0.008 265);
+  --popover-foreground: oklch(0.97 0.003 265);
+  --primary: oklch(0.6866 0.2045 33.8);
+  /* 深字压橙底（6.85:1），比白字（3.07:1）可读；按钮观感也更「实体」 */
+  --primary-foreground: oklch(0.17 0.03 33);
+  --secondary: oklch(0.26 0.008 265);
+  --secondary-foreground: oklch(0.97 0.003 265);
+  --muted: oklch(0.245 0.008 265);
+  --muted-foreground: oklch(0.705 0.012 265);
+  --accent: oklch(0.285 0.03 33);
+  --accent-foreground: oklch(0.97 0.003 265);
+  --destructive: oklch(0.65 0.2 25);
   --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --sidebar: hsl(240 5.9% 10%);
-  --sidebar-foreground: hsl(240 4.8% 95.9%);
-  --sidebar-primary: hsl(224.3 76.3% 48%);
-  --sidebar-primary-foreground: hsl(0 0% 100%);
-  --sidebar-accent: hsl(240 3.7% 15.9%);
-  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
-  --sidebar-border: hsl(240 3.7% 15.9%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.6866 0.2045 33.8 / 60%);
+
+  --sidebar: oklch(0.175 0.008 265);
+  --sidebar-foreground: oklch(0.94 0.003 265);
+  --sidebar-primary: oklch(0.6866 0.2045 33.8);
+  --sidebar-primary-foreground: oklch(0.17 0.03 33);
+  --sidebar-accent: oklch(0.245 0.008 265);
+  --sidebar-accent-foreground: oklch(0.97 0.003 265);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.6866 0.2045 33.8 / 60%);
 }
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 3px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -99,6 +127,8 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-rating: var(--rating);
+  --color-rating-foreground: var(--rating-foreground);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -107,6 +137,11 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
+
+  /* 中文优先字体栈：Android WebView 命中 Noto Sans CJK，避免落到系统衬线体 */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", "Helvetica Neue",
+    Arial, sans-serif;
 }
 
 /* ============================================================================
@@ -121,12 +156,13 @@
   --safe-left: env(safe-area-inset-left, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
 
-  /* 移动端外壳尺寸（与 app-shell.tsx 保持一致） */
-  --app-header-h: 3.5rem; /* h-14 */
-  --app-tabbar-h: 4rem; /* h-16 */
+  /* 顶部栏高度（内容高，不含状态栏）—— 各页自带头部时统一引用 */
+  --app-topbar-h: 3rem; /* h-12 */
 
-  /* 顶栏可视高度 = 内容高 + 状态栏；底部 tab 同理 */
-  --app-header-total: calc(var(--app-header-h) + var(--safe-top));
+  /* 底部 tab 高度（内容高，不含手势条） */
+  --app-tabbar-h: 3.75rem; /* h-15 */
+
+  --app-topbar-total: calc(var(--app-topbar-h) + var(--safe-top));
   --app-tabbar-total: calc(var(--app-tabbar-h) + var(--safe-bottom));
 }
 
@@ -148,6 +184,18 @@
     /* 原生容器内禁用长按选中/高亮，更接近原生观感 */
     -webkit-tap-highlight-color: transparent;
   }
+  /* 深色滚动条：原生容器里默认滚动条很扎眼 */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--muted-foreground) 35%, transparent);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
 }
 
 @layer utilities {
@@ -160,8 +208,8 @@
     padding-bottom: var(--safe-bottom);
   }
   /* 固定顶栏总高（含状态栏） */
-  .h-app-header {
-    height: var(--app-header-total);
+  .h-app-topbar {
+    height: var(--app-topbar-total);
   }
   /* 固定底栏总高（含手势条） */
   .h-app-tabbar {
@@ -169,6 +217,34 @@
   }
   /* 主内容区底部留白，避免被底部 tab 压住 */
   .pb-app-tabbar {
-    padding-bottom: var(--app-tabbar-total);
+    padding-bottom: calc(var(--app-tabbar-total) + 0.5rem);
+  }
+  /* 主内容区顶部留白，避免被固定顶栏压住 */
+  .pt-app-topbar {
+    padding-top: var(--app-topbar-total);
+  }
+
+  /* 隐藏滚动条（横向轨 / 频道 tabs 通用，替代各页内联的 [&::-webkit-scrollbar]:hidden） */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 海报/卡片描边：深底上纯靠明度区分容易糊，补一条极淡内描边 */
+  .ring-hairline {
+    box-shadow: inset 0 0 0 1px oklch(1 0 0 / 8%);
+  }
+
+  /* 渐变遮罩：图上压字用，比 from-black/80 更可控（底部 0% 透明起） */
+  .scrim-bottom {
+    background-image: linear-gradient(
+      to top,
+      oklch(0 0 0 / 78%) 0%,
+      oklch(0 0 0 / 45%) 45%,
+      oklch(0 0 0 / 0%) 100%
+    );
   }
 }

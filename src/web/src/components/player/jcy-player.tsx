@@ -120,6 +120,10 @@ export function JcyPlayer({
       hotkey: true,
       pip: true,
       lang: "zh-cn",
+      // ArtPlayer 默认主题色是**纯红 `#f00`**（源码里 `.art-video-player{--art-theme:#f00}`），
+      // 与全站品牌橙红打架 —— 症状就是「进度条最左端停着一个孤立红点」（未播放时
+      // `.art-progress-indicator` 停在 0%，颜色是 theme）。这里对齐品牌色。
+      theme: "#FF5C39",
       moreVideoAttr: { crossOrigin: "anonymous", playsInline: true },
       quality: qualities.length > 1
         ? qualities.map((q, i) => ({

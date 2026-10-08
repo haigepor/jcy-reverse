@@ -11,7 +11,14 @@
 //                             桥侧缓存 30 s，每个 action 上限 4 s，不会把线程池耗干
 //   4. GET /debug          —— 汇总自检（含端到端 probe_config_code），仅在手动刷新时拉
 //
-// 入口：右下角悬浮按钮；若 /health 连续 3 次不通则自动展开（这正是「一直骨架屏」的场景）。
+// 入口（2026-10 样式重设计后）：**不再常驻悬浮按钮** —— 它是调试入口，不该出现在
+// 用户界面里（旧版那个琥珀色「诊断」胶囊一直压在顶栏右上角）。
+// 现在两条入口：
+//   1. 自动：/health 连续 3 次不通 → 自动展开（这正是「一直骨架屏」的场景，必须保留）
+//   2. 手动：「我的」页底部的「诊断面板」按钮 → 派发 window 事件 jcy:open-diag
+//
+// 之所以用 DOM 事件而不是 store：DiagOverlay 挂在路由树之外（main.tsx 顶层），
+// 引入 zustand 会增加一层无谓的耦合，事件在这里是最轻的通道。
 
 import { useCallback, useEffect, useRef, useState } from "react"
 import type { ReactNode } from "react"
@@ -90,6 +97,13 @@ export function DiagOverlay() {
     }
   }, [])
 
+  // 手动入口：任意页面派发 jcy:open-diag 即可拉起（「我的」页底部按钮用）
+  useEffect(() => {
+    const onOpen = () => setOpen(true)
+    window.addEventListener("jcy:open-diag", onOpen)
+    return () => window.removeEventListener("jcy:open-diag", onOpen)
+  }, [])
+
   useEffect(() => {
     if (!open) return
     void refresh(false)
@@ -97,22 +111,11 @@ export function DiagOverlay() {
     return () => window.clearInterval(id)
   }, [open, refresh])
 
-  if (!open) {
-    return (
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        title="诊断面板"
-        className="fixed right-2 top-2 z-[9999] rounded-full border border-amber-400/60 bg-amber-100/90 px-2.5 py-1 text-[11px] font-medium text-amber-900 shadow-sm backdrop-blur"
-      >
-        诊断
-      </button>
-    )
-  }
+  if (!open) return null
 
   return (
     <div className="fixed inset-0 z-[9999] flex flex-col bg-background/98 backdrop-blur">
-      <div className="flex items-center gap-2 border-b px-3 py-2">
+      <div className="safe-top flex items-center gap-2 border-b px-3 py-2">
         <span className="text-sm font-semibold">诊断面板</span>
         <span className="truncate text-[11px] text-muted-foreground">API_BASE = {API_BASE || "(空)"}</span>
         <button
