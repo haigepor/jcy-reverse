@@ -43,6 +43,15 @@ research/captures/rsa_scan/*
 !research/engine_c/
 research/engine_c/*
 !research/engine_c/*.dll
+# 阶段报告：README「证据可复现」约定要求结论所指向的报告可被检出。
+# 只放行纯文本 .md（顶层 29 篇 + handoff/ 14 篇，合计约 612 KB）；
+# 同目录下的 json/jsonl/txt 转储与 dec/ 仍不入库。
+!research/reports/
+research/reports/*
+!research/reports/*.md
+!research/reports/handoff/
+research/reports/handoff/*
+!research/reports/handoff/*.md
 # 文档引用的实测脚本与留档结果
 !research/tmp_all_endpoints_par.py
 !research/tmp_all_endpoints.json
@@ -75,3 +84,31 @@ __pycache__/
 .DS_Store
 Thumbs.db
 .workbuddy
+.zcode/
+# ===== 前端构建产物 =====
+src/web/dist/
+src/web/server/__pycache__/
+
+# ===== 安卓客户端（src/app）产物 =====
+# 依赖 / Web 产物 / Gradle 构建 / CMake 构建 / 从 APK 提取的 so
+src/app/node_modules/
+src/app/www/
+src/app/android/.gradle/
+src/app/android/build/
+src/app/android/app/build/
+src/app/android/app/.cxx/
+src/app/android/local.properties
+src/app/android/capacitor-cordova-android-plugins/
+src/app/android/capacitor.settings.gradle
+src/app/android/app/capacitor.build.gradle
+src/app/android/app/src/main/assets/public/
+src/app/android/app/src/main/jniLibs/arm64-v8a/libcore.so
+src/app/dist/
+
+# cap sync 每次重写这两份资产清单
+src/app/android/app/src/main/assets/capacitor.config.json
+src/app/android/app/src/main/assets/capacitor.plugins.json
+
+# ===== 前端工具链缓存 =====
+src/web/.registry/
+*.tsbuildinfo
