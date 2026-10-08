@@ -1,0 +1,21 @@
+# 依赖与构建产物
+node_modules/
+www/
+dist/
+.gradle/
+build/
+*.apk
+*.aab
+local.properties
+
+# 从原版 APK 提取的 so 不入库（体积大，用 scripts/extract_so.sh 再生）
+android/app/src/main/jniLibs/arm64-v8a/libcore.so
+
+# Capacitor 生成
+android/capacitor-cordova-android-plugins/
+android/app/src/main/assets/public/
+
+# IDE
+.idea/
+*.iml
+.DS_Store

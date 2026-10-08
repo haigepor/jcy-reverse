@@ -1,0 +1,99 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+android {
+    namespace "app.video.guoguo"
+    compileSdk rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId "app.video.guoguo"
+        minSdk rootProject.ext.minSdkVersion
+        targetSdk rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        aaptOptions {
+            ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }
+
+        // libcore.so 仅提供 arm64-v8a，故只打这一个 ABI
+        ndk {
+            abiFilters 'arm64-v8a'
+        }
+
+        externalNativeBuild {
+            cmake {
+                cppFlags ""
+            }
+        }
+    }
+
+    // JNI 桥（jcy_core_jni.c -> libjcy_core.so）
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+            version "3.22.1"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
+
+    kotlinOptions {
+        jvmTarget = '21'
+    }
+
+    packagingOptions {
+        jniLibs {
+            // true = 安装时把 .so 解压到 nativeLibraryDir（等价 extractNativeLibs="true"）。
+            // JcyCore.nativeLoad() 是手动 dlopen(绝对路径)，必须让库真实存在于
+            // applicationInfo.nativeLibraryDir 下，所以这里必须是 true。
+            useLegacyPackaging = true
+        }
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+}
+
+repositories {
+    flatDir {
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+
+    implementation project(':capacitor-android')
+    implementation project(':capacitor-cordova-android-plugins')
+
+    // 网络层：主 API 为明文 HTTP，用 OkHttp 而非 WebView fetch，规避 CORS 与明文限制
+    implementation "com.squareup.okhttp3:okhttp:4.12.0"
+
+    // 本机 HTTP 桥：让 WebView 里的 React 前端用与浏览器版**完全相同**的
+    // /api、/resolve、/stream 路由取数，前端零改动（见 JcyBridgeServer.kt）
+    implementation "org.nanohttpd:nanohttpd:2.3.1"
+
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+}
+
+// 由 `npx cap sync android` 生成；首次构建前需先执行一次 sync
+apply from: 'capacitor.build.gradle'

@@ -1,0 +1,8 @@
+// 注意：本工程基于标准 Capacitor 工程定制。
+// capacitor.settings.gradle 由 `npx cap sync android` 自动生成/更新，
+// 请勿在此处硬编码 :capacitor-android，否则 sync 后会重复 include。
+include ':app'
+include ':capacitor-cordova-android-plugins'
+project(':capacitor-cordova-android-plugins').projectDir = new File('./capacitor-cordova-android-plugins/')
+
+apply from: 'capacitor.settings.gradle'
