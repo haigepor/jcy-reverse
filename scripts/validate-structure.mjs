@@ -18,13 +18,23 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const IGNORED_TOP_LEVEL = new Set([".git", "node_modules", ".venv", ".workbuddy", ".workbuddy-ai",
-    "_trash_20260930", "libcore.so"]); // libcore.so 为本地二进制样本（.gitignore），不入库不登记
+    ".zcode", "_trash_20260930", "libcore.so"]); // libcore.so 为本地二进制样本（.gitignore），不入库不登记；.zcode 为 AI 助手工作区（.gitignore）
 const GLOB_CHARS = /[*?[\]{}]/;
 
 // 骨架区：源码/测试/文档/配置目录，必须逐层在 README 目录树中登记，防止文档漂移
 const DEEP_DIR_ROOTS = [".github", "assets", "config", "docs", "scripts", "src", "tests"];
 // 产物区：研究/工具工作区，含大量中间产物，仅要求顶层登记，不强制逐层展开
 const ARTIFACT_DIR_ROOTS = ["research", "reflutter_work", "tools"];
+
+// 骨架区内仍需整棵跳过的子树（依赖 / 构建 / 缓存 / 平台工程产物）
+// 这些目录内容由工具链生成，逐层登记无意义且会随版本漂移。
+const SKIP_SUBTREES = [
+  "src/app/node_modules",
+  "src/app/www",
+  "src/app/android",
+  "src/web/node_modules",
+  "src/web/dist",
+];
 
 const errors = [];
 const warnings = [];
@@ -101,8 +111,13 @@ function checkReadmeTree() {
 
 function collectDirs(rel, acc = []) {
   for (const item of fs.readdirSync(path.join(ROOT, rel), { withFileTypes: true })) {
-    if (!item.isDirectory() || item.name === "__pycache__") continue;
+    // 前端工具链产物目录不入 README 树（依赖/构建/缓存/组件注册表元数据）
+    if (!item.isDirectory() || item.name === "__pycache__" || item.name === "node_modules"
+        || item.name === "dist" || item.name === ".vite" || item.name === ".turbo"
+        || item.name === ".registry") continue;
     const child = `${rel}/${item.name}`;
+    // 整棵跳过的子树（见 SKIP_SUBTREES）
+    if (SKIP_SUBTREES.some((p) => child === p || child.startsWith(`${p}/`))) continue;
     acc.push(child);
     collectDirs(child, acc);
   }
@@ -224,11 +239,39 @@ const REQUIRED_FILES = [
   "scripts/re-env/start_re_env.bat",
   "scripts/re-env/verify_env.py",
   "src/README.md",
-  "src/pyproject.toml",
-  "src/jcy_protocol/__init__.py",
-  "src/jcy_protocol/auth.py",
-  "src/jcy_protocol/channels.py",
-  "src/jcy_protocol/vectors.py",
+  "src/tools/README.md",
+  "src/tools/pyproject.toml",
+  "src/tools/jcy_protocol/__init__.py",
+  "src/tools/jcy_protocol/auth.py",
+  "src/tools/jcy_protocol/channels.py",
+  "src/tools/jcy_protocol/vectors.py",
+  "src/web/package.json",
+  "src/web/vite.config.ts",
+  "src/web/index.html",
+  "src/web/src/main.tsx",
+  "src/web/src/index.css",
+  "src/web/src/components/layout/app-shell.tsx",
+  "src/app/README.md",
+  "src/app/package.json",
+  "src/app/capacitor.config.ts",
+  "src/app/scripts/build_web.sh",
+  "src/app/scripts/extract_so.sh",
+  "src/app/scripts/gen_cap_template.sh",
+  "src/app/scripts/install_android_sdk.sh",
+  "src/app/android/settings.gradle",
+  "src/app/android/variables.gradle",
+  "src/app/android/app/build.gradle",
+  "src/app/android/app/src/main/AndroidManifest.xml",
+  "src/app/android/app/src/main/res/xml/network_security_config.xml",
+  "src/app/android/app/src/main/cpp/CMakeLists.txt",
+  "src/app/android/app/src/main/cpp/jcy_core_jni.c",
+  "src/app/android/app/src/main/java/app/video/guoguo/MainActivity.kt",
+  "src/app/android/app/src/main/java/app/video/guoguo/JcyCore.kt",
+  "src/app/android/app/src/main/java/app/video/guoguo/JcyCorePlugin.kt",
+  "src/app/android/app/src/main/java/app/video/guoguo/JcyApi.kt",
+  "src/app/android/app/src/main/java/app/video/guoguo/JcyBridgeServer.kt",
+  "src/web/src/lib/api.ts",
+  "src/web/src/vite-env.d.ts",
   "tests/README.md",
   "tests/test_channels.py",
   "tests/test_auth_pure.py",
@@ -274,7 +317,11 @@ const REQUIRED_DIRS = [
   "research/corpus",
   "research/reports",
   "research/archive",
-  "src/jcy_protocol",
+  "src/tools/jcy_protocol",
+  "src/web/src",
+  "src/web/server",
+  "src/app/android",
+  "src/app/scripts",
   "tests/fixtures",
   "scripts/lib",
   "scripts/re-env",

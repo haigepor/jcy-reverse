@@ -34,7 +34,7 @@ pnpm tools:status        # 查看安装状态
 ```
 assets/assets/apk/base.apk ──apktool──▶ research/base_smali(_patched)/ ──uber-apk-signer──▶ 设备安装
      │
-     └──blutter──▶ research/artifacts/blutter_research/（pp.txt 对象池 + asm）
+     └──blutter──▶ research/artifacts/blutter_out/（pp.txt 对象池 + asm）
                     │
                     └──frida(libgadget)──▶ research/gg_*.js hook 脚本族
 ```

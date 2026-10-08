@@ -15,7 +15,7 @@ import time
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "deliverables"))
 sys.path.insert(0, os.path.join(HERE, "captures", "rsa_scan"))
-sys.path.insert(0, os.path.join(HERE, "..", "src"))
+sys.path.insert(0, os.path.join(HERE, "..", "src", "tools"))
 
 import authgen_server as S  # noqa: E402
 

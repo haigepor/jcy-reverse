@@ -60,7 +60,7 @@ def _worker(item):
     method, path, params = item
     sys.path.insert(0, os.path.join(ROOT, "research", "deliverables"))
     sys.path.insert(0, os.path.join(ROOT, "research", "captures", "rsa_scan"))
-    sys.path.insert(0, os.path.join(ROOT, "src"))
+    sys.path.insert(0, os.path.join(ROOT, "src", "tools"))
     import jcy_client as J
     cli = J.JcyClient()
     t0 = time.time()
