@@ -1,0 +1,6 @@
+# jcy-web 本地后端桥依赖（安装进仓库根 .venv）
+#   .venv/Scripts/pip install -r src/web/server/requirements.txt
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+httpx>=0.28.0
+anyio>=4.6.0

@@ -1,2 +1,4 @@
 packages:
   - "src"
+  - "src/web"
+  - "src/app"

@@ -29,7 +29,7 @@ Flutter 壳 + 自研加密协议的视频 App 完整逆向工程文档。
 ## 快速上手
 
 ```python
-import sys; sys.path.insert(0, 'research/client')
+import sys; sys.path.insert(0, 'research/deliverables/client')
 from gg_client import SIG_KEY, SIG_IV, channel_decrypt
 
 # 解一条真实信令响应
@@ -59,14 +59,14 @@ python -m http.server 3000
 
 ```
 docs/                 本文档站
-assets/assets/apk/base.apk          原始样本 (SHA256 AC170C12..., 未动)
+assets/apk/base.apk          原始样本 (SHA256 AC170C12..., 未动)
 research/reports/API_ANALYSIS.md   分析主文档 (静态+动态)
 research/reports/VERIFICATION.txt  审计链 (两阶段)
 research/deliverables/client/           Python 客户端 + frida 脚本族
-research/artifacts/blutter_research/      blutter 产物 (pp.txt 对象池 / asm / frida 模板)
+research/artifacts/blutter_out/      blutter 产物 (pp.txt 对象池 / asm / frida 模板)
 research/deliverables/demo/index.html   离线验证页
-research/auth_samples.json 真机抓包样本 (88 条)
 reflutter_work/       dump.dart / 组合包 APK
+src/web/              jcy-web 前端工作区（脚手架，详见 src/web/README.md）
 tools/re-env/         雷电14 面具环境安装包 (gitignored)
 scripts/re-env/       环境一键拉起 (start_re_env.bat) + 验收 (verify_env.py)
 ```

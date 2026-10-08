@@ -22,7 +22,15 @@
     "test:protocol": "node scripts/run-tests.mjs",
     "validate": "node scripts/validate-structure.mjs",
     "docs:serve": "docsify serve docs",
-    "docs:open": "pnpm docs:serve"
+    "docs:open": "pnpm docs:serve",
+    "web:dev": "pnpm --filter jcy-web dev",
+    "web:build": "pnpm --filter jcy-web build",
+    "web:preview": "pnpm --filter jcy-web preview",
+    "web:server": "node scripts/web-server.mjs",
+    "app:web": "pnpm --filter jcy-app build:web",
+    "app:sync": "pnpm --filter jcy-app sync",
+    "app:apk": "pnpm --filter jcy-app build:apk",
+    "app:so": "bash src/app/scripts/extract_so.sh"
   },
   "devDependencies": {
     "docsify-cli": "4.4.4"

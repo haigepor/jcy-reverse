@@ -1,0 +1,174 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* 骨架屏 shimmer 高光：扫过→短暂停顿再扫，比纯 animate-pulse 顺滑（配合 ui/skeleton.tsx） */
+@theme {
+  --animate-shimmer: shimmer 1.8s ease-in-out infinite;
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    55%, 100% {
+      transform: translateX(100%);
+    }
+  }
+}
+
+/* shadcn/ui（Tailwind v4 CSS 变量模式）—— neutral 基色 */
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --sidebar: hsl(0 0% 98%);
+  --sidebar-foreground: hsl(240 5.3% 26.1%);
+  --sidebar-primary: hsl(240 5.9% 10%);
+  --sidebar-primary-foreground: hsl(0 0% 98%);
+  --sidebar-accent: hsl(240 4.8% 95.9%);
+  --sidebar-accent-foreground: hsl(240 5.9% 10%);
+  --sidebar-border: hsl(220 13% 91%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --sidebar: hsl(240 5.9% 10%);
+  --sidebar-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-primary: hsl(224.3 76.3% 48%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(240 3.7% 15.9%);
+  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-border: hsl(240 3.7% 15.9%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+}
+
+/* ============================================================================
+   安全区（Android 15+ / iOS 刘海屏）
+   targetSdk 35 起 Android 强制 edge-to-edge，WebView 会铺到状态栏与手势条之下。
+   配合 index.html 的 viewport-fit=cover，这里把 env(safe-area-inset-*) 收敛成
+   语义变量，布局统一引用它们，避免每个组件各自硬编码。
+   ============================================================================ */
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  /* 移动端外壳尺寸（与 app-shell.tsx 保持一致） */
+  --app-header-h: 3.5rem; /* h-14 */
+  --app-tabbar-h: 4rem; /* h-16 */
+
+  /* 顶栏可视高度 = 内容高 + 状态栏；底部 tab 同理 */
+  --app-header-total: calc(var(--app-header-h) + var(--safe-top));
+  --app-tabbar-total: calc(var(--app-tabbar-h) + var(--safe-bottom));
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    /* 禁止整页纵向回弹：否则拖动会把页面拖出安全区，露出空白 */
+    overscroll-behavior-y: none;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground;
+    /* 左右横屏时的安全区，用 padding 而不是 margin，背景色仍铺满 */
+    padding-left: var(--safe-left);
+    padding-right: var(--safe-right);
+    overscroll-behavior-y: none;
+    /* 原生容器内禁用长按选中/高亮，更接近原生观感 */
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@layer utilities {
+  /* 顶栏：内容整体下移一个状态栏高度 */
+  .safe-top {
+    padding-top: var(--safe-top);
+  }
+  /* 底部 tab：内容整体上移一个手势条高度 */
+  .safe-bottom {
+    padding-bottom: var(--safe-bottom);
+  }
+  /* 固定顶栏总高（含状态栏） */
+  .h-app-header {
+    height: var(--app-header-total);
+  }
+  /* 固定底栏总高（含手势条） */
+  .h-app-tabbar {
+    height: var(--app-tabbar-total);
+  }
+  /* 主内容区底部留白，避免被底部 tab 压住 */
+  .pb-app-tabbar {
+    padding-bottom: var(--app-tabbar-total);
+  }
+}
