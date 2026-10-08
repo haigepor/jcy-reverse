@@ -10,7 +10,7 @@ import sys
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))
 for _p in (os.path.join(ROOT, "research", "deliverables"),
            os.path.join(ROOT, "research", "toolchain"),
-           os.path.join(ROOT, "src"), os.path.dirname(os.path.abspath(__file__))):
+           os.path.join(ROOT, "src", "tools"), os.path.dirname(os.path.abspath(__file__))):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 

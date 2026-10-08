@@ -28,7 +28,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 RESEARCH = os.path.dirname(HERE)
 ROOT = os.path.dirname(RESEARCH)
 TOOLCHAIN = os.path.join(RESEARCH, "toolchain")
-for _p in (os.path.join(ROOT, "src"), TOOLCHAIN):
+for _p in (os.path.join(ROOT, "src", "tools"), TOOLCHAIN):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 

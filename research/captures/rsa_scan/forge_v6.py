@@ -23,7 +23,7 @@ import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
-sys.path.insert(0, os.path.join(ROOT, "src"))
+sys.path.insert(0, os.path.join(ROOT, "src", "tools"))
 sys.path.insert(0, HERE)
 
 from jcy_protocol.auth import ALPHABET, STD_B64, AES_KEY, AES_IV  # noqa: E402

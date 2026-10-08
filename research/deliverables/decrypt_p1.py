@@ -24,7 +24,7 @@ _RESEARCH = os.path.dirname(_HERE)
 _ROOT = os.path.dirname(_RESEARCH)
 for _p in (os.path.join(_RESEARCH, "captures", "rsa_scan"),
            os.path.join(_RESEARCH, "toolchain"),
-           os.path.join(_ROOT, "src")):
+           os.path.join(_ROOT, "src", "tools")):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 

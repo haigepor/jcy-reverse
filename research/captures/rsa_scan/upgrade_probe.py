@@ -24,7 +24,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 RESEARCH = os.path.dirname(os.path.dirname(HERE))
 ROOT = os.path.dirname(RESEARCH)
 AUTHGEN = os.path.join(RESEARCH, "deliverables", "authgen.py")
-sys.path.insert(0, os.path.join(ROOT, "src"))
+sys.path.insert(0, os.path.join(ROOT, "src", "tools"))
 
 PUB_PATH = os.path.join(HERE, "server_pub_from_libapp.pem")
 HOST = "http://43.145.33.254:27990"

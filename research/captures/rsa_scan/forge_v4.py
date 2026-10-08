@@ -21,7 +21,7 @@ from Crypto.Util.Padding import pad
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
-sys.path.insert(0, os.path.join(ROOT, "src"))
+sys.path.insert(0, os.path.join(ROOT, "src", "tools"))
 from jcy_protocol.auth import ALPHABET, STD_B64  # noqa: E402
 
 URL = "http://43.145.33.254:27990/app/video/device-base"

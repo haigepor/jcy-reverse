@@ -57,7 +57,7 @@ import sys
 _HERE = os.path.dirname(os.path.abspath(__file__))
 for _p in (_HERE, os.path.join(_HERE, "..", "toolchain"),
            os.path.join(_HERE, "..", "captures", "rsa_scan"),
-           os.path.join(_HERE, "..", "..", "src")):
+           os.path.join(_HERE, "..", "..", "src", "tools")):
     _p = os.path.abspath(_p)
     if _p not in sys.path:
         sys.path.insert(0, _p)

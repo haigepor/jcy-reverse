@@ -98,6 +98,11 @@ class JcyApi:
         "douyinvod.com": "https://www.douyin.com",
     }
 
+    # 快速解析：play 响应的 url 字段落在明文前 16 块内（2026-10-07 实测块 8-13），
+    # 只标定/解密 16 块即可拿到 source，省掉全解 323 块的标定（~385ms → ~22ms）。
+    # 失败（抽不到 source / 解析器返回异常）会自动回退全解 + Lua 现役参数。
+    PLAY_FAST_BLOCKS = 16
+
     def __init__(self, timeout: int = 25):
         if os.environ.get("JCY_HOST"):
             JC.HOST = os.environ["JCY_HOST"]
@@ -105,10 +110,14 @@ class JcyApi:
             JC.PORT = int(os.environ["JCY_PORT"])
         self.timeout = timeout
         self.cli = DiskAuthClient()
+        self._pconn = None       # 外链解析器持久连接（keep-alive）
+        self._pconn_key = None
 
     # ---- 底层 ----
-    def request(self, method: str, path: str, params: dict | None = None) -> dict:
-        r = self.cli.request(method, path, params, timeout=self.timeout)
+    def request(self, method: str, path: str, params: dict | None = None,
+                blocks: int | None = None) -> dict:
+        r = self.cli.request(method, path, params, timeout=self.timeout,
+                             blocks=blocks)
         if r.get("encrypted") and r.get("json") is not None:
             return r["json"]
         if r.get("encrypted"):
@@ -185,7 +194,7 @@ class JcyApi:
 
     # ---- 播放链 ----
     def play(self, vid, play_fmt: str = "mp4", part: str | None = None,
-             resolve: bool = True):
+             resolve: bool = True, fast: bool = False):
         """播放凭证 + 解析器。返回::
 
             {"code": ..., "play": <play 原始响应>, "source": <source 串>,
@@ -193,6 +202,13 @@ class JcyApi:
              "urls": [{"name","vcodec","format","url","headers"}, ...]}
 
         resolve=False 时只拿播放凭证，不请求外链解析器。
+
+        fast=True（部分解密）：play 响应只解前 PLAY_FAST_BLOCKS 块 —— source 字段落在
+        明文块 8-13（2026-10-07 实测），323 块全解的标定成本 613ms 可降到 ~180ms。
+        解析器参数此时用类默认（实测现役 lua 的 salt/aes_key/aes_iv/parser 与默认值
+        完全一致；lua 里根本没有 salt="..." 赋值，盐硬编码在 sign() 函数体里）。
+        抽不到 source、或解析器返回异常/无直链 → 自动回退：把**同一信封**全解开
+        （不发第二次 HTTP）再用 Lua 现役参数重试。
         """
         if part is None:
             det = self.data(self.video_detail(vid)) or {}
@@ -204,59 +220,169 @@ class JcyApi:
         part = part or "第1集"
         q = "/app/video/play?id=%s&play=%s&part=%s" % (
             vid, quote(str(play_fmt)), quote(str(part)))
-        pj = self.request("POST", q, {})
-        out = {"code": pj.get("code") if isinstance(pj, dict) else None,
-               "play": pj, "source": None, "lua": None,
+        rr = self.cli.request("POST", q, {}, timeout=self.timeout,
+                              blocks=(self.PLAY_FAST_BLOCKS if fast else None))
+        out = {"code": None, "play": None, "source": None, "lua": None,
                "playAddr": [], "urls": []}
-        pd = self.data(pj)
-        if isinstance(pd, list):                      # 现役形态: data 直接是条目数组
-            entries = pd
-        elif isinstance(pd, dict) and isinstance(pd.get("data"), list):
-            entries = pd["data"]
+        lua = ""
+        pj = rr.get("json") if rr.get("encrypted") else None
+        if isinstance(pj, dict):
+            out["code"], out["play"] = pj.get("code"), pj
+            pd = self.data(pj)
+            if isinstance(pd, list):                  # 现役形态: data 直接是条目数组
+                entries = pd
+            elif isinstance(pd, dict) and isinstance(pd.get("data"), list):
+                entries = pd["data"]
+            else:
+                entries = []
+            entry = entries[0] if entries else {}
+            out["source"] = entry.get("url")
+            lua = entry.get("parse") or ""
         else:
-            entries = []
-        entry = entries[0] if entries else {}
-        source, lua = entry.get("url"), entry.get("parse") or ""
-        out["source"], out["lua"] = source, lua
-        if not source or not resolve:
+            # 截断明文（fast 路径）：正则直抽 code 与第一个 url 字段
+            txt = (rr.get("plain") or b"").decode("utf-8", "replace")
+            out["code"] = self._trunc_int(txt, "code")
+            out["source"] = self._trunc_str(txt, "url")
+            # 保持与全解路径一致的响应形状（桥层/前端会读 play.message）
+            out["play"] = {"code": out["code"],
+                           "message": self._trunc_str(txt, "message")}
+        out["lua"] = lua
+        if not out["source"] or not resolve:
             return out
 
-        salt, aes_key, aes_iv, parser = self._lua_params(lua)
+        if lua:
+            salt, aes_key, aes_iv, parser = self._lua_params(lua)
+        else:
+            salt, aes_key, aes_iv, parser = self.SALT, self.AES_KEY, self.AES_IV, self.PARSER
+        if self._fill_addrs(out, salt, aes_key, aes_iv, parser):
+            return out
+
+        # ---- 回退：同一信封全解开（不发第二次 HTTP），改用 Lua 现役参数重试 ----
+        if not lua and rr.get("p1b") and rr.get("k16b"):
+            full = self.cli._decrypt_p1(rr["p1b"], rr["k16b"])
+            pj2 = self._try_json(full)
+            if isinstance(pj2, dict):
+                out["code"], out["play"] = pj2.get("code"), pj2
+                pd = self.data(pj2)
+                entries = pd if isinstance(pd, list) else (
+                    pd.get("data") if isinstance(pd, dict) else None)
+                entries = entries if isinstance(entries, list) else []
+                entry = entries[0] if entries else {}
+                out["source"] = entry.get("url") or out["source"]
+                lua2 = entry.get("parse") or ""
+                out["lua"] = lua2
+                if lua2:
+                    salt, aes_key, aes_iv, parser = self._lua_params(lua2)
+                    self._fill_addrs(out, salt, aes_key, aes_iv, parser)
+        return out
+
+    # ---- 快速路径辅助 ----
+    @staticmethod
+    def _trunc_str(txt: str, key: str):
+        """从**截断**的明文 JSON 里抽字符串字段。
+
+        注意转义坑：明文里嵌套的 lua 是 \\" 形式，所以值内部必须允许 \\. ，
+        不能写 [^"]+（会在第一个转义引号处截断，且不完整）。
+        """
+        m = re.search(r'"%s"\s*:\s*"((?:[^"\\]|\\.)*)"' % re.escape(key), txt)
+        if not m:
+            return None
+        try:
+            return json.loads('"%s"' % m.group(1))
+        except Exception:                              # noqa: BLE001
+            return m.group(1)
+
+    @staticmethod
+    def _trunc_int(txt: str, key: str):
+        m = re.search(r'"%s"\s*:\s*(-?\d+)' % re.escape(key), txt)
+        return int(m.group(1)) if m else None
+
+    @staticmethod
+    def _try_json(b):
+        try:
+            if isinstance(b, bytes):
+                b = b.decode("utf-8")
+            return json.loads(b)
+        except Exception:                              # noqa: BLE001
+            return None
+
+    def _resolver_get(self, host: str, path: str, headers: dict) -> str:
+        """外链解析器 GET（keep-alive 持久连接；坏线重建重试一次）。
+
+        实测：nginx 侧响应头 Connection: keep-alive，同连接第 2 请求省 ~144ms。
+        """
+        import http.client
+        key = (host, 80)
+        last = None
+        for attempt in (0, 1):
+            conn = self._pconn
+            if conn is not None and self._pconn_key != key:
+                try:
+                    conn.close()
+                except Exception:                      # noqa: BLE001
+                    pass
+                conn = self._pconn = None
+            if conn is None:
+                conn = http.client.HTTPConnection(host, 80, timeout=self.timeout)
+                self._pconn, self._pconn_key = conn, key
+            try:
+                conn.request("GET", path, headers=headers)
+                r = conn.getresponse()
+                return r.read().decode("utf-8", "replace")
+            except Exception as exc:                   # noqa: BLE001
+                last = exc
+                try:
+                    conn.close()
+                except Exception:                      # noqa: BLE001
+                    pass
+                self._pconn = None
+        raise last
+
+    def _fill_addrs(self, out: dict, salt: str, aes_key: str, aes_iv: str,
+                    parser: str) -> bool:
+        """请求解析器并把 playAddr/urls 填进 out。返回是否拿到可用直链。"""
+        source = out.get("source")
+        if not source:
+            return False
         ts = int(time.time() * 1000)
         s1 = hashlib.md5((self.APP_VERSION + salt + str(ts)).encode()).hexdigest()
         s2 = hashlib.md5((source + salt + str(ts)).encode()).hexdigest()
-        import http.client
         # 解析器前缀转 (host, 相对路径)，如 "http://yh.jx.xajtl.com/vo1v03.php?url="
         prest = parser.split("://", 1)[-1]
         phost, _, ppath = prest.partition("/")
-        conn = http.client.HTTPConnection(phost, 80, timeout=self.timeout)
         try:
-            conn.request("GET", "/" + ppath + source + "&t=" + str(ts), headers={
+            ptxt = self._resolver_get(phost, "/" + ppath + source + "&t=" + str(ts), {
                 "x-time": str(ts), "x-form": self.PLATFORM,
                 "x-sign1": s1, "x-sign2": s2,
                 "user-agent": "Dart/3.6 (dart:io)"})
-            r = conn.getresponse()
-            ptxt = r.read().decode("utf-8", "replace")
-        finally:
-            conn.close()
-        pobj = self._parse_resolver(ptxt, aes_key, aes_iv)
-        pa = pobj.get("data", {}).get("playAddr") if isinstance(pobj, dict) else None
-        out["playAddr"] = pa if isinstance(pa, list) else []
+        except Exception as exc:                       # noqa: BLE001
+            out["resolver_raw"] = "解析器请求失败: %r" % exc
+            return False
+        try:
+            pobj = self._parse_resolver(ptxt, aes_key, aes_iv)
+        except Exception as exc:                       # noqa: BLE001
+            out["resolver_raw"] = "解析器响应不可解析: %r" % exc
+            return False
         out["resolver_raw"] = pobj if pobj is not None else ptxt[:400]
-        if not out["playAddr"] and isinstance(pobj, dict) and pobj.get("url"):
+        pa = pobj.get("data", {}).get("playAddr") if isinstance(pobj, dict) else None
+        if isinstance(pa, list) and pa:
+            out["playAddr"] = pa
+            out["urls"] = []
+            for it in pa:
+                url = (it.get("m3u8FileDomain") or "") + (it.get("addr") or "")
+                out["urls"].append({
+                    "name": ("%s %s" % (it.get("desc", ""), it.get("title", ""))).strip(),
+                    "vcodec": it.get("vcodec"), "format": it.get("format"),
+                    "url": url, "headers": self.direct_headers(url)})
+            return True
+        if isinstance(pobj, dict) and pobj.get("url"):
             # 旧结构：单 URL（{code:200, type:"mp4", url:...}），无清晰度分级
             url = pobj["url"]
-            out["urls"].append({"name": str(pobj.get("type") or "mp4"),
-                                "vcodec": None, "format": pobj.get("type"),
-                                "url": url, "headers": self.direct_headers(url)})
-            return out
-        for it in out["playAddr"]:
-            url = (it.get("m3u8FileDomain") or "") + (it.get("addr") or "")
-            out["urls"].append({
-                "name": ("%s %s" % (it.get("desc", ""), it.get("title", ""))).strip(),
-                "vcodec": it.get("vcodec"), "format": it.get("format"),
-                "url": url, "headers": self.direct_headers(url)})
-        return out
+            out["urls"] = [{"name": str(pobj.get("type") or "mp4"),
+                            "vcodec": None, "format": pobj.get("type"),
+                            "url": url, "headers": self.direct_headers(url)}]
+            return True
+        return False
 
     @classmethod
     def _lua_params(cls, lua: str):

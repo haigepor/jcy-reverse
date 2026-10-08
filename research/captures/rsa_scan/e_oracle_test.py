@@ -11,7 +11,7 @@ import sys
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "research", "deliverables"))
 sys.path.insert(0, os.path.join(ROOT, "research", "toolchain"))
-sys.path.insert(0, os.path.join(ROOT, "src"))
+sys.path.insert(0, os.path.join(ROOT, "src", "tools"))
 
 from authgen import UnicornESession, DEV_BASE, OFF_PIPE, AES_KEY, AES_IV  # noqa: E402
 
